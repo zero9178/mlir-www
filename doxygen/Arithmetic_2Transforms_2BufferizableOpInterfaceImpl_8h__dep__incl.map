@@ -1,0 +1,6 @@
+<map id="include/mlir/Dialect/Arithmetic/Transforms/BufferizableOpInterfaceImpl.h" name="include/mlir/Dialect/Arithmetic/Transforms/BufferizableOpInterfaceImpl.h">
+<area shape="rect" id="node2" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,124,212,151"/>
+<area shape="rect" id="node4" href="$Arithmetic_2Transforms_2BufferizableOpInterfaceImpl_8cpp.html" title="lib/Dialect/Arithmetic\l/Transforms/BufferizableOpInterface\lImpl.cpp" alt="" coords="237,109,493,165"/>
+<area shape="rect" id="node5" href="$Arithmetic_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Arithmetic\l/Transforms/Bufferize.cpp" alt="" coords="517,117,703,158"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,213,186,255"/>
+</map>

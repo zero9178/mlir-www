@@ -1,0 +1,9 @@
+<map id="mlir::OpAsmParser::Argument" name="mlir::OpAsmParser::Argument">
+<area shape="rect" id="node2" href="$classmlir_1_1Type.html" title="Instances of the Type class are uniqued, have an immutable identifier and an optional mutable compone..." alt="" coords="570,13,657,39"/>
+<area shape="rect" id="node3" href="$classmlir_1_1TypeStorage.html" title="Base storage class appearing in a Type. " alt="" coords="220,13,356,39"/>
+<area shape="rect" id="node4" href="$classmlir_1_1StorageUniquer_1_1BaseStorage.html" title="This class acts as the base storage that all storage classes must derived from. " alt="" coords="5,5,163,47"/>
+<area shape="rect" id="node6" href="$classllvm_1_1Optional.html" title="llvm::Optional\&lt; mlir\l::Location \&gt;" alt="" coords="536,115,691,156"/>
+<area shape="rect" id="node7" href="$classllvm_1_1Optional.html" title="llvm::Optional\&lt; T \&gt;" alt="" coords="212,113,364,139"/>
+<area shape="rect" id="node8" href="$structmlir_1_1OpAsmParser_1_1UnresolvedOperand.html" title="This is the representation of an operand reference. " alt="" coords="538,189,689,231"/>
+<area shape="rect" id="node10" href="$classunsigned.html" title="unsigned" alt="" coords="247,214,329,241"/>
+</map>

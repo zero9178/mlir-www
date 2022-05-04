@@ -1,0 +1,7 @@
+<map id="include/mlir/Dialect/Linalg/Transforms/BufferizableOpInterfaceImpl.h" name="include/mlir/Dialect/Linalg/Transforms/BufferizableOpInterfaceImpl.h">
+<area shape="rect" id="node2" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,124,212,151"/>
+<area shape="rect" id="node4" href="$Linalg_2Transforms_2BufferizableOpInterfaceImpl_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/BufferizableOp\lInterfaceImpl.cpp" alt="" coords="236,109,435,165"/>
+<area shape="rect" id="node5" href="$Linalg_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/Bufferize.cpp" alt="" coords="459,117,646,158"/>
+<area shape="rect" id="node6" href="$InitTensorElimination_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/InitTensorElimination.cpp" alt="" coords="670,117,937,158"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,213,186,255"/>
+</map>

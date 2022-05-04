@@ -1,0 +1,10 @@
+<map id="include/mlir/Dialect/SPIRV/Transforms/Passes.h" name="include/mlir/Dialect/SPIRV/Transforms/Passes.h">
+<area shape="rect" id="node2" href="$InitAllPasses_8h.html" title="include/mlir/InitAllPasses.h" alt="" coords="5,102,203,129"/>
+<area shape="rect" id="node4" href="$CanonicalizeGLSLPass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/CanonicalizeGLSLPass.cpp" alt="" coords="227,95,432,136"/>
+<area shape="rect" id="node5" href="$DecorateCompositeTypeLayoutPass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/DecorateCompositeTypeLayoutPass.cpp" alt="" coords="456,95,741,136"/>
+<area shape="rect" id="node6" href="$LowerABIAttributesPass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/LowerABIAttributesPass.cpp" alt="" coords="766,95,973,136"/>
+<area shape="rect" id="node7" href="$RewriteInsertsPass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/RewriteInsertsPass.cpp" alt="" coords="997,95,1203,136"/>
+<area shape="rect" id="node8" href="$UnifyAliasedResourcePass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/UnifyAliasedResourcePass.cpp" alt="" coords="1227,95,1451,136"/>
+<area shape="rect" id="node9" href="$UpdateVCEPass_8cpp.html" title="lib/Dialect/SPIRV/Transforms\l/UpdateVCEPass.cpp" alt="" coords="1475,95,1680,136"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="27,184,181,225"/>
+</map>

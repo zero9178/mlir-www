@@ -1,0 +1,5 @@
+<map id="mlir::FlatAffineRelation" name="mlir::FlatAffineRelation">
+<area shape="rect" id="node2" href="$classmlir_1_1FlatAffineValueConstraints.html" title="FlatAffineValueConstraints represents an extension of IntegerPolyhedron where each identifier can hav..." alt="" coords="5,184,233,211"/>
+<area shape="rect" id="node3" href="$classmlir_1_1presburger_1_1IntegerPolyhedron.html" title="An IntegerPolyhedron represents the set of points from a PresburgerSpace that satisfy a list of affin..." alt="" coords="29,95,209,136"/>
+<area shape="rect" id="node4" href="$classmlir_1_1presburger_1_1IntegerRelation.html" title="An IntegerRelation represents the set of points from a PresburgerSpace that satisfy a list of affine ..." alt="" coords="29,5,209,47"/>
+</map>

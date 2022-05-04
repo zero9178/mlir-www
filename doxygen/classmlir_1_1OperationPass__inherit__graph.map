@@ -1,0 +1,9 @@
+<map id="mlir::OperationPass&lt; OpT &gt;" name="mlir::OperationPass&lt; OpT &gt;">
+<area shape="rect" id="node3" href="$classmlir_1_1OperationPass.html" title="mlir::OperationPass\&lt;\&gt;" alt="" coords="501,86,671,113"/>
+<area shape="rect" id="node7" href="$classmlir_1_1OperationPass.html" title="mlir::OperationPass\l\&lt; gpu::GPUModuleOp \&gt;" alt="" coords="497,140,675,181"/>
+<area shape="rect" id="node2" href="$classmlir_1_1Pass.html" title="The abstract base pass class. " alt="" coords="5,118,91,145"/>
+<area shape="rect" id="node4" href="$classmlir_1_1InterfacePass.html" title="Pass to transform an operation that implements the given interface. " alt="" coords="761,5,903,47"/>
+<area shape="rect" id="node5" href="$classmlir_1_1PassWrapper.html" title="mlir::PassWrapper\&lt;\l OpToOpPassAdaptor,\l OperationPass\&lt;\&gt; \&gt;" alt="" coords="752,71,912,127"/>
+<area shape="rect" id="node6" href="$classmlir_1_1detail_1_1OpToOpPassAdaptor.html" title="An adaptor pass used to run operation passes over nested operations. " alt="" coords="989,79,1169,120"/>
+<area shape="rect" id="node8" href="$classmlir_1_1gpu_1_1SerializeToBlobPass.html" title="Base pass class to serialize kernel functions through LLVM into user&#45;specified IR and add the resulti..." alt="" coords="724,151,940,178"/>
+</map>

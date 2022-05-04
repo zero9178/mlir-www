@@ -1,0 +1,203 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Transform Dialect - MLIR</title><meta name=description content="Multi-Level IR Compiler Framework"><meta name=generator content="Hugo 0.80.0"><link href=https://mlir.llvm.org/index.xml rel=alternate type=application/rss+xml><link rel=canonical href=https://mlir.llvm.org/docs/Dialects/Transform/><link rel=stylesheet href=https://mlir.llvm.org/css/theme.css><script src=https://use.fontawesome.com/releases/v5.0.6/js/all.js></script><link rel=stylesheet href=https://mlir.llvm.org/css/chroma.min.css><script src=https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js></script><script src=https://mlir.llvm.org/js/bundle.js></script><script type=text/javascript src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type=text/x-mathjax-config>
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$', '$'] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    }
+  });
+</script><link rel=apple-touch-icon sizes=180x180 href="/apple-touch-icon.png?v=1"><link rel=icon type=image/png sizes=32x32 href="/favicon-32x32.png?v=1"><link rel=icon type=image/png sizes=16x16 href="/favicon-16x16.png?v=1"><link rel=manifest href="/site.webmanifest?v=1"><link rel=mask-icon href="/safari-pinned-tab.svg?v=1" color=#3775e0><link rel="shortcut icon" href="/favicon.ico?v=1"><meta name=msapplication-TileColor content="#2d89ef"><meta name=theme-color content="#ffffff"><link rel=icon href=/favicon.svg type=image/svg+xml sizes=any><style>:root{}</style></head><body><div class=container><header><h1><div><img src=https://mlir.llvm.org//mlir-logo.png width=40px align=absmiddle>
+MLIR</div></h1><p class=description>Multi-Level IR Compiler Framework</p></header><div class=global-menu><nav><ul><li class=parent><a href>Community<i class="fas fa-angle-right"></i></a><ul class=sub-menu><li class=child><a href=https://llvm.discourse.group/c/mlir/31>Forums</a></li><li class=child><a href=https://discord.gg/xS7Z362>Chat</a></li></ul></li><li><a href=/getting_started/Debugging/>Debugging Tips</a></li><li><a href=/getting_started/Faq/>FAQ</a></li><li class=parent><a href=https://github.com/llvm/llvm-project/tree/main/mlir>Source<i class="fas fa-angle-right"></i></a><ul class=sub-menu><li class=child><a href=/doxygen/>Doxygen</a></li><li class=child><a href=https://github.com/llvm/llvm-project/tree/main/mlir>GitHub</a></li></ul></li><li><a href="https://bugs.llvm.org/buglist.cgi?bug_status=__open__&list_id=177877&order=changeddate%20DESC%2Cpriority%2Cbug_severity&product=MLIR&query_format=specific">Bugs</a></li><li><a href=https://github.com/llvm/mlir-www/tree/main/website/static/LogoAssets>Logo Assets</a></li><li><a href=https://www.youtube.com/MLIRCompiler>Youtube Channel</a></li></ul></nav></div><div class=content-container><main><h1>Transform Dialect</h1><p><nav id=TableOfContents><ul><li><a href=#disclaimer>Disclaimer</a></li><li><a href=#overview>Overview</a></li><li><a href=#dialect-extension-mechanism>Dialect Extension Mechanism</a></li><li><a href=#side-effects>Side Effects</a></li><li><a href=#intended-use-and-integrations>Intended Use and Integrations</a></li><li><a href=#effects-on-the-infrastructure>Effects on the Infrastructure</a></li><li><a href=#operation-definition>Operation definition</a><ul><li><a href=#transformpdl_match-mlirtransformpdlmatchop><code>transform.pdl_match</code> (::mlir::transform::PDLMatchOp)</a></li><li><a href=#transformsequence-mlirtransformsequenceop><code>transform.sequence</code> (::mlir::transform::SequenceOp)</a></li><li><a href=#transformwith_pdl_patterns-mlirtransformwithpdlpatternsop><code>transform.with_pdl_patterns</code> (::mlir::transform::WithPDLPatternsOp)</a></li><li><a href=#transformyield-mlirtransformyieldop><code>transform.yield</code> (::mlir::transform::YieldOp)</a></li></ul></li><li><a href=#transformopinterface-transformopinterface>TransformOpInterface (<code>TransformOpInterface</code>)</a><ul><li><a href=#methods>Methods:</a></li></ul></li></ul></nav><p>Fine-grain transformation control dialect</p><h2 id=disclaimer>Disclaimer&nbsp;<a class=headline-hash href=#disclaimer>¶</a></h2><p>** Proceed with care: not ready for general use. **</p><p>This dialect is evolving rapidly and may change on a very short notice. To
+decrease the maintenance burden and churn, only a few in-tree use cases are
+currently supported in the main tree:</p><ul><li>high-level transformations on &ldquo;structured ops&rdquo; (i.e. ops that operate on
+chunks of data in a way that can be decomposed into operations on
+smaller chunks of data and control flow) in Linalg, Tensor and Vector
+dialects.</li></ul><p><em>Please post a description of the intended use case on the MLIR forum and
+wait for confirmation.</em></p><h2 id=overview>Overview&nbsp;<a class=headline-hash href=#overview>¶</a></h2><p>This dialect provides operations that can be used to control transformation
+of the IR using a different portion of the IR. It refers to the IR being
+transformed as payload IR, and to the IR guiding the transformation as
+transform IR.</p><p>The main use case for this dialect is orchestrating fine-grain
+transformations on individual operations or sets thereof. For example, it
+may involve finding loop-like operations with specific properties (e.g.,
+large size) in the payload IR, applying loop tiling to those and only those
+operations, and then applying loop unrolling to the inner loops produced
+by the previous transformations. As such, it is not intended as a
+replacement for the pass infrastructure, nor for the pattern rewriting
+infrastructure. In the most common case, the transform IR will be processed
+and applied to the payload IR by a pass. Transformations expressed by the
+transform dialect may be implemented using the pattern infrastructure or any
+other relevant MLIR component.</p><p>The following IR gives a rough idea of what the operations in this dialect
+may look like:</p><div class=highlight><pre class=chroma><code class=language-mlir data-lang=mlir><span class=nv>%0</span> <span class=p>=</span> transform<span class=p>.</span>loop<span class=p>.</span>find <span class=p>{</span> size <span class=p>&gt;</span> <span class=m>42</span> <span class=p>}</span>
+<span class=nv>%1</span><span class=p>:</span><span class=nl>2 =</span> transform<span class=p>.</span>loop<span class=p>.</span>tile <span class=p>{</span> <span class=nl>tile_sizes =</span> <span class=p>[</span><span class=m>2</span><span class=p>,</span><span class=m>3</span><span class=p>,</span><span class=m>4</span><span class=p>]</span> <span class=p>}</span>
+transform<span class=p>.</span>loop<span class=p>.</span>unroll <span class=nv>%1#1</span>
+</code></pre></div><p>The values defined by operations in this dialect correspond to (groups of)
+operations in the payload IR. In the example above, <code>%0</code> corresponds to the
+set of loops found in the payload IR that satisfy the condition, and <code>%1</code>
+correspond to groups of outer and inner loops, respectively, produced by
+the tiling transformation.</p><p>Overall, Transform IR ops are expected to be contained in a single top-level
+op. Such top-level ops specify how to apply the transformations described
+by the operations they contain, e.g., <code>transform.sequence</code> executes
+transformations one by one and fails if any of them fails. Such ops are
+expected to have the <code>PossibleTopLevelTransformOpTrait</code> and may be used
+without arguments.</p><h2 id=dialect-extension-mechanism>Dialect Extension Mechanism&nbsp;<a class=headline-hash href=#dialect-extension-mechanism>¶</a></h2><p>This dialect is designed to be extensible, that is, clients of this dialect
+are allowed to inject additional operations into this dialect using the
+<code>TransformDialectExtension</code> mechanism. This allows the dialect to avoid a
+dependency on the implementation of the transformation as well as to avoid
+introducing dialect-specific transform dialects. In the example above,
+the operations may have been injected by a notional <code>loop</code> dialect rather
+than defined in this dialect, hence the common prefix.</p><p>It is recommended to prefix injected operations with one or several
+dot-separated words that indicate which extension adds them. For
+dialect-specific transformations, the prefix is naturally the name of the
+dialect, e.g., <code>transform.affine.reschedule</code>. For dialect-agnostic
+transformations (typically implemented using interfaces), the prefix may
+be derived from the interface name or from a common concept, e.g.,
+<code>transform.loop.tile</code> may apply to any loop-like operation that implements
+<code>TileableOpInterface</code>. The C++ classes for the dialect extension should
+include the prefix in their name, e.g., <code>AffineTransformDialectExtension</code> or
+<code>LoopTransformDialectExtension</code> in the cases above. Unprefixed operation
+names are reserved for ops defined directly in the Transform dialect.</p><p>Operations injected into the dialect must:</p><ul><li><p>Implement the <code>TransformOpInterface</code> to execute the corresponding
+transformation on the payload IR.</p></li><li><p>Implement the <code>MemoryEffectsOpInterface</code> to annotate the effects of
+the transform IR operation on the payload IR as well as on the mapping
+between transform IR values and payload IR operations. See below for
+the description of available effects.</p></li></ul><p>The presence of interface implementations is checked at runtime when the
+dialect is loaded to allow for those implementations to be supplied by
+separate dialect extensions if desired.</p><h2 id=side-effects>Side Effects&nbsp;<a class=headline-hash href=#side-effects>¶</a></h2><p>The Transform dialect relies on MLIR side effect modelling to enable
+optimization of the transform IR. More specifically, it provides several
+side effect resource objects and expects operations to describe their
+effects on these resources.</p><ul><li><p><code>TransformMappingResource</code> - side effect resource corresponding to the
+mapping between transform IR values and payload IR operations.</p><ul><li><p>An <code>Allocate</code> effect from this resource means creating a new mapping
+entry, it is always accompanied by a <code>Write</code> effet.</p></li><li><p>A <code>Read</code> effect from this resource means accessing the mapping.</p></li><li><p>A <code>Free</code> effect on this resource indicates the removal of the mapping
+entry, typically after a transformation that modifies the payload IR
+operations associated with one of the transform IR operation&rsquo;s
+operands. It is always accompanied by a <code>Read</code> effect.</p></li></ul></li><li><p><code>PayloadIRResource</code> - side effect resource corresponding to the payload
+IR itself.</p><ul><li><p>A <code>Read</code> effect from this resource means accessing the payload IR.</p></li><li><p>A <code>Write</code> effect on this resource means mutating the payload IR. It is
+almost always accompanied by a <code>Read</code>.</p></li></ul></li></ul><p>The typical flow of values in the transform IR is as follows. Most
+operations produce new transform IR values and immediately associate them
+with a list of payload IR operations. This corresponds to <code>Allocate</code> and
+<code>Write</code> effects on the <code>TransformMappingResource</code>, and often requires at
+least a <code>Read</code> effect on the <code>PayloadIRResource</code>. Transform operations that
+only inspect the payload IR to produce new handles are usually limited to
+these effects on their operands. Transform operations that mutate the
+payload IR are thought to <em>consume</em> the handles provided as operands, that
+is have the <code>Read</code> and <code>Free</code> effects on them. As with the usual memory
+effects, using a value after it was freed is incorrect. In case of the
+transform IR, this value is likely associated with payload IR operations
+that were modified or even removed by the transformation, so it is
+meaningless to refer to them. When further transformations are desired, the
+transform operations can return <em>new</em> handles that can be read or consumed
+by subsequent operations.</p><h2 id=intended-use-and-integrations>Intended Use and Integrations&nbsp;<a class=headline-hash href=#intended-use-and-integrations>¶</a></h2><p>The transformation control infrastructure provided by this dialect is
+positioned roughly between rewrite patterns and passes. A transformation
+that is executed by a transform operation is likely to be sufficiently
+complex to require at least a set of patterns to be implemented. It is also
+expected to be more focused than a pass: a pass typically applies identical
+transformations everywhere in the IR, a transform dialect-controlled
+transformation would apply to a small subset of operations selected, e.g.,
+by a pattern-matching operation or generated by a previous transformation.
+It is discouraged, although technically possible, to run a pass pipeline as
+part of the transform op implementation.</p><p>One of the main scenarios for using this dialect is fine-grain chaining of
+transformations. For example, a loop-like operation may see its iteration
+domain split into two parts, implemented as separate loops (transformation
+known as index-set splitting), each of which is then transformed differently
+(e.g., the first loop is tiled and the second unrolled) with the necessary
+enabling and cleanup patterns around the main transformation:</p><div class=highlight><pre class=chroma><code class=language-mlir data-lang=mlir><span class=c>// &lt;generate %loop, e.g., by pattern-matching&gt;
+</span><span class=c>// ...
+</span><span class=c></span><span class=nv>%parts</span><span class=p>:</span><span class=nl>2 =</span> transform<span class=p>.</span>loop<span class=p>.</span>split <span class=nv>%loop</span> <span class=p>{</span> <span class=nl>upper_bound_divisible_by =</span> <span class=m>8</span> <span class=p>}</span>
+transform<span class=p>.</span>loop<span class=p>.</span>tile <span class=nv>%parts#0</span> <span class=p>{</span> <span class=nl>tile_sizes =</span> <span class=p>[</span><span class=m>8</span><span class=p>]</span> <span class=p>}</span>
+transform<span class=p>.</span>loop<span class=p>.</span>unroll <span class=nv>%parts#1</span> <span class=p>{</span> full <span class=p>}</span>
+</code></pre></div><p>This composition would have been difficult to implement as separate passes
+since the hypothetical &ldquo;tiling&rdquo; and &ldquo;unrolling&rdquo; pass would need to somehow
+differentiate between the parts of the loop produced by the previous pass
+(both are the same operation, and it is likely undesirable to pollute the
+operation with pass-specific information). Implementing passes that run the
+combined transfomration would have run into the combinatorial explosion
+issue due to multiple possible transform compositions or into the need for
+deep pass parameterization, the ultimate form of which is an ad-hoc dialect
+to specify which transformations the pass should run. The transform dialect
+provides a uniform, extensible mechanism for controlling transformations in
+such cases.</p><p>The transform dialect is supposed to be consumed by an &ldquo;interpreter&rdquo; pass
+that drives the application of transformations. To ensure extensibility and
+composability, this pass is not expected to actually perform the
+transformations specified by the ops. Instead, the transformations are
+implemented by the transform ops themselves via <code>TransformOpInterface</code>. The
+pass serves as the entry point, handles the flow of transform operations and
+takes care of bookkeeping. As such, the transform dialect does not provide
+the interpreter pass. Instead, it provides a set of utilities that can be
+used by clients to define their own interpreter passes or as part of a more
+complex pass. For example, the mapping between values in the tranfsorm IR
+and operations in the payload IR, or the function that applies the
+transformations specified by ops in the given block sequentially. Note that
+a transform op may have regions with further transform ops in them, with
+the op itself guiding how to dispatch the transformation control flow to
+those regions. This approach allows clients to decide on the relative
+location of the transform IR in their input (e.g., nested modules, separate
+modules, optional regions to certain operations, etc.), register additional
+transform operations and perform client-specific bookkeeping.</p><h2 id=effects-on-the-infrastructure>Effects on the Infrastructure&nbsp;<a class=headline-hash href=#effects-on-the-infrastructure>¶</a></h2><p>Although scoped to a single dialect, this functionality conceptually belongs
+to the MLIR infrastructure. It aims to be minimally intrusive and opt-in.</p><p>Some infrastructural components may grow extra functionality to support the
+transform dialect. In particular, the pattern infrastructure may add extra
+hooks to identify the &ldquo;main results&rdquo; of a transformation or to notify
+external observers about changes made to certain operations. These are not
+expected to affect the existing uses of the infrastructure.</p><p>For the sake of reusability, transformations should be implemented as
+utility functions that are called from the interface methods of transform
+ops rather than having the methods directly act on the payload IR.</p><p><nav id=TableOfContents><ul><li><a href=#disclaimer>Disclaimer</a></li><li><a href=#overview>Overview</a></li><li><a href=#dialect-extension-mechanism>Dialect Extension Mechanism</a></li><li><a href=#side-effects>Side Effects</a></li><li><a href=#intended-use-and-integrations>Intended Use and Integrations</a></li><li><a href=#effects-on-the-infrastructure>Effects on the Infrastructure</a></li><li><a href=#operation-definition>Operation definition</a><ul><li><a href=#transformpdl_match-mlirtransformpdlmatchop><code>transform.pdl_match</code> (::mlir::transform::PDLMatchOp)</a></li><li><a href=#transformsequence-mlirtransformsequenceop><code>transform.sequence</code> (::mlir::transform::SequenceOp)</a></li><li><a href=#transformwith_pdl_patterns-mlirtransformwithpdlpatternsop><code>transform.with_pdl_patterns</code> (::mlir::transform::WithPDLPatternsOp)</a></li><li><a href=#transformyield-mlirtransformyieldop><code>transform.yield</code> (::mlir::transform::YieldOp)</a></li></ul></li><li><a href=#transformopinterface-transformopinterface>TransformOpInterface (<code>TransformOpInterface</code>)</a><ul><li><a href=#methods>Methods:</a></li></ul></li></ul></nav><h2 id=operation-definition>Operation definition&nbsp;<a class=headline-hash href=#operation-definition>¶</a></h2><h3 id=transformpdl_match-mlirtransformpdlmatchop><code>transform.pdl_match</code> (::mlir::transform::PDLMatchOp)&nbsp;<a class=headline-hash href=#transformpdl_match-mlirtransformpdlmatchop>¶</a></h3><p>Finds ops that match the named PDL pattern</p><p>Syntax:</p><pre><code>operation ::= `transform.pdl_match` $pattern_name `in` $root attr-dict
+</code></pre><p>Find Payload IR ops nested within the Payload IR op associated with the
+operand that match the PDL pattern identified by its name. The pattern is
+expected to be defined in the closest surrounding <code>WithPDLPatternsOp</code>.</p><p>Produces a Transform IR value associated with the list of Payload IR ops
+that matched the pattern. The order of results in the list is that of the
+Operation::walk, clients are advised not to rely on a specific order though.
+If the operand is assocaited with multiple Payload IR ops, finds matching
+ops nested within each of those and produces a single list containing all
+of the matched ops.</p><p>The tranfsormation is considered successful regardless of whether some
+Payload IR ops actually matched the pattern and only fails if the pattern
+could not be looked up or compiled.</p><p>Interfaces: TransformOpInterface</p><h4 id=attributes>Attributes:&nbsp;<a class=headline-hash href=#attributes>¶</a></h4><table><thead><tr><th style=text-align:center>Attribute</th><th style=text-align:center>MLIR Type</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>pattern_name</code></td><td style=text-align:center>::mlir::SymbolRefAttr</td><td>symbol reference attribute</td></tr></tbody></table><h4 id=operands>Operands:&nbsp;<a class=headline-hash href=#operands>¶</a></h4><table><thead><tr><th style=text-align:center>Operand</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>root</code></td><td>PDL handle to an <code>mlir::Operation *</code></td></tr></tbody></table><h4 id=results>Results:&nbsp;<a class=headline-hash href=#results>¶</a></h4><table><thead><tr><th style=text-align:center>Result</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>matched</code></td><td>PDL handle to an <code>mlir::Operation *</code></td></tr></tbody></table><h3 id=transformsequence-mlirtransformsequenceop><code>transform.sequence</code> (::mlir::transform::SequenceOp)&nbsp;<a class=headline-hash href=#transformsequence-mlirtransformsequenceop>¶</a></h3><p>Contains a sequence of other transform ops to apply</p><p>Syntax:</p><pre><code>operation ::= `transform.sequence` ($root^)? attr-dict-with-keyword regions (`:` type($results)^)?
+</code></pre><p>The transformations indicated by the sequence are applied in order of their
+appearance. Each value produced by a transformation within the sequence
+corresponds to an operation or a group of operations in the payload IR.
+During application, if any transformation in the sequence fails, the entire
+sequence fails immediately leaving the payload IR in potentially invalid
+state, i.e., this operation offers no transformation rollback capabilities.</p><p>The entry block of this operation has a single argument that maps to either
+the operand if provided or the top-level container operation of the payload
+IR, typically the root operation of the pass interpreting the transform
+dialect. Operand omission is only allowed for sequences not contained in
+another sequence.</p><p>Traits: PossibleTopLevelTransformOpTrait, SingleBlockImplicitTerminator&lt;::mlir::transform::YieldOp></p><p>Interfaces: MemoryEffectOpInterface, OpAsmOpInterface, TransformOpInterface</p><h4 id=operands-1>Operands:&nbsp;<a class=headline-hash href=#operands-1>¶</a></h4><table><thead><tr><th style=text-align:center>Operand</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>root</code></td><td>PDL handle to an <code>mlir::Operation *</code></td></tr></tbody></table><h4 id=results-1>Results:&nbsp;<a class=headline-hash href=#results-1>¶</a></h4><table><thead><tr><th style=text-align:center>Result</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>results</code></td><td>any type</td></tr></tbody></table><h3 id=transformwith_pdl_patterns-mlirtransformwithpdlpatternsop><code>transform.with_pdl_patterns</code> (::mlir::transform::WithPDLPatternsOp)&nbsp;<a class=headline-hash href=#transformwith_pdl_patterns-mlirtransformwithpdlpatternsop>¶</a></h3><p>Contains PDL patterns available for use in transforms</p><p>Syntax:</p><pre><code>operation ::= `transform.with_pdl_patterns` ($root^)? attr-dict-with-keyword regions
+</code></pre><p>This op contains a set of named PDL patterns that are available for the
+Transform dialect operations to be used for pattern matching. For example,
+PDLMatchOp can be used to produce a Transform IR value associated with all
+Payload IR operations that match the pattern as follows:</p><div class=highlight><pre class=chroma><code class=language-mlir data-lang=mlir>transform<span class=p>.</span>with_pdl_patterns <span class=p>{</span>
+<span class=nl>^bb0</span><span class=p>(</span><span class=nv>%arg0</span><span class=p>:</span> <span class=p>!</span>pdl<span class=p>.</span>operation<span class=p>):</span>
+  pdl<span class=p>.</span>pattern <span class=nf>@my_pattern</span> <span class=p>:</span> benefit<span class=p>(</span><span class=m>1</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nv>%0</span> <span class=p>=</span> pdl<span class=p>.</span>operation <span class=c>//...
+</span><span class=c></span>    <span class=c>// Regular PDL goes here.
+</span><span class=c></span>    pdl<span class=p>.</span>rewrite <span class=nv>%0</span> with <span class=s>&#34;transform.dialect&#34;</span>
+  <span class=p>}</span>
+
+  sequence <span class=nv>%arg0</span> <span class=p>{</span>
+  <span class=nl>^bb0</span><span class=p>(</span><span class=nv>%arg1</span><span class=p>:</span> <span class=p>!</span>pdl<span class=p>.</span>operation<span class=p>):</span>
+    <span class=nv>%1</span> <span class=p>=</span> pdl_match <span class=nf>@my_pattern</span> in <span class=nv>%arg1</span>
+    <span class=c>// Use %1 as handle
+</span><span class=c></span>  <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>Note that the pattern is expected to finish with a <code>pdl.rewrite</code> terminator
+that points to the custom rewriter named &ldquo;transform.dialect&rdquo;. The rewriter
+actually does nothing, but the transform application will keep track of the
+operations that matched the pattern.</p><p>This op is expected to contain <code>pdl.pattern</code> operations and exactly one
+another Transform dialect operation that gets executed with all patterns
+available. This op is a possible top-level Transform IR op, the argument of
+its entry block corresponds to either the root op of the payload IR or the
+ops associated with its operand when provided.</p><p>Traits: NoTerminator, PossibleTopLevelTransformOpTrait, RecursiveSideEffects, SymbolTable</p><p>Interfaces: OpAsmOpInterface, TransformOpInterface</p><h4 id=operands-2>Operands:&nbsp;<a class=headline-hash href=#operands-2>¶</a></h4><table><thead><tr><th style=text-align:center>Operand</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>root</code></td><td>PDL handle to an <code>mlir::Operation *</code></td></tr></tbody></table><h3 id=transformyield-mlirtransformyieldop><code>transform.yield</code> (::mlir::transform::YieldOp)&nbsp;<a class=headline-hash href=#transformyield-mlirtransformyieldop>¶</a></h3><p>Yields operation handles from a transform IR region</p><p>Syntax:</p><pre><code>operation ::= `transform.yield` operands attr-dict (`:` type($operands)^)?
+</code></pre><p>This terminator operation yields operation handles from regions of the
+transform IR ops back to the containing op. It is not itself associated with
+any transformation on the payload IR and is used for flow purposes only.</p><p>Traits: Terminator</p><h4 id=operands-3>Operands:&nbsp;<a class=headline-hash href=#operands-3>¶</a></h4><table><thead><tr><th style=text-align:center>Operand</th><th>Description</th></tr></thead><tbody><tr><td style=text-align:center><code>operands</code></td><td>any type</td></tr></tbody></table><h2 id=transformopinterface-transformopinterface>TransformOpInterface (<code>TransformOpInterface</code>)&nbsp;<a class=headline-hash href=#transformopinterface-transformopinterface>¶</a></h2><p>This interface is to be implemented by operations that identify
+transformations to be performed on other operations. The former are referred
+to as transform IR operations. The latter are referred to as payload IR
+operations. Such transform IR operations provide a fine-grain control
+mechanism over how transformations are applied by using and defining
+transform IR values, referred to as handles, that correspond to sets of
+operations in the payload IR. Transformations are applied starting from the
+operations identified by handles, but may affect other operations as well.
+Further restrictions may be imposed by flows that rely on transform IR
+operations to control transformations.</p><h3 id=methods>Methods:&nbsp;<a class=headline-hash href=#methods>¶</a></h3><h4 id=apply><code>apply</code>&nbsp;<a class=headline-hash href=#apply>¶</a></h4><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=o>::</span><span class=n>mlir</span><span class=o>::</span><span class=n>LogicalResult</span> <span class=n>apply</span><span class=p>(</span><span class=o>::</span><span class=n>mlir</span><span class=o>::</span><span class=n>transform</span><span class=o>::</span><span class=n>TransformResults</span> <span class=o>&amp;</span><span class=n>transformResults</span><span class=p>,</span> <span class=o>::</span><span class=n>mlir</span><span class=o>::</span><span class=n>transform</span><span class=o>::</span><span class=n>TransformState</span> <span class=o>&amp;</span><span class=n>state</span><span class=p>);</span>
+</code></pre></div><p>Applies the transformation represented by the current operation. This
+accepts as arguments the object that must be populated with results of
+the current transformation and a transformation state object that can be
+used for queries, e.g., to obtain the list of operations on which the
+transformation represented by the current op is targeted.</p><p>NOTE: This method <em>must</em> be implemented by the user.</p><div class=edit-meta><br></div><nav class=pagination><a class="nav nav-prev" href=/docs/Dialects/TOSA/ title="Tensor Operator Set Architecture (TOSA) Dialect"><i class="fas fa-arrow-left" aria-hidden=true></i>Prev - Tensor Operator Set Architecture (TOSA) Dialect</a>
+<a class="nav nav-next" href=/docs/ExtensibleDialects/ title="Extensible dialects">Next - Extensible dialects <i class="fas fa-arrow-right" aria-hidden=true></i></a></nav><footer><p class=powered>Powered by <a href=https://gohugo.io>Hugo</a>. Theme by <a href=https://themes.gohugo.io/hugo-theme-techdoc/>TechDoc</a>. Designed by <a href=https://github.com/thingsym/hugo-theme-techdoc>Thingsym</a>.</p></footer></main><div class=sidebar><nav class=slide-menu><ul><li><a href=https://mlir.llvm.org/>Home</a></li><li><a href=/pubs/>MLIR Related Publications</a></li><li><a href=/talks/>Talks</a></li><li><a href=/users/>Users of MLIR</a></li><li class=has-sub-menu><a href=/getting_started/>Getting Started<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/getting_started/Debugging/>Debugging Tips</a></li><li><a href=/getting_started/Faq/>FAQ</a></li><li><a href=/getting_started/Contributing/>How to Contribute</a></li><li><a href=/getting_started/DeveloperGuide/>Developer Guide</a></li><li><a href=/getting_started/openprojects/>Open Projects</a></li><li><a href=/getting_started/Glossary/>Glossary</a></li><li><a href=/getting_started/TestingGuide/>Testing Guide</a></li></ul></li><li class="parent has-sub-menu"><a href=/docs/>Code Documentation<span class="mark opened">-</span></a><ul class=sub-menu><li class=has-sub-menu><a href=/docs/Bindings/>Bindings<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Bindings/Python/>MLIR Python Bindings</a></li></ul></li><li class=has-sub-menu><a href=/docs/Tools/>Tools<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tools/MLIRLSP/>MLIR : Language Server Protocol</a></li><li><a href=/docs/Tools/mlir-reduce/>MLIR Reduce</a></li></ul></li><li><a href=/docs/BufferDeallocationInternals/>Buffer Deallocation - Internals</a></li><li><a href=/docs/Bufferization/>Bufferization</a></li><li><a href=/docs/DataLayout/>Data Layout Modeling</a></li><li><a href=/docs/DebugActions/>Debug Actions</a></li><li><a href=/docs/AttributesAndTypes/>Defining Dialect Attributes and Types</a></li><li><a href=/docs/DefiningDialects/>Defining Dialects</a></li><li><a href=/docs/Diagnostics/>Diagnostic Infrastructure</a></li><li><a href=/docs/DialectConversion/>Dialect Conversion</a></li><li class="parent has-sub-menu"><a href=/docs/Dialects/>Dialects<span class="mark opened">-</span></a><ul class=sub-menu><li><a href=/docs/Dialects/OpenACCDialect/>'acc' Dialect</a></li><li><a href=/docs/Dialects/Affine/>'affine' Dialect</a></li><li><a href=/docs/Dialects/AMX/>'amx' Dialect</a></li><li><a href=/docs/Dialects/ArithmeticOps/>'arith' Dialect</a></li><li><a href=/docs/Dialects/ArmNeon/>'arm_neon' Dialect</a></li><li><a href=/docs/Dialects/ArmSVE/>'arm_sve' Dialect</a></li><li><a href=/docs/Dialects/AsyncDialect/>'async' Dialect</a></li><li><a href=/docs/Dialects/BufferizationOps/>'bufferization' Dialect</a></li><li><a href=/docs/Dialects/ControlFlowDialect/>'cf' Dialect</a></li><li><a href=/docs/Dialects/ComplexOps/>'complex' Dialect</a></li><li><a href=/docs/Dialects/DLTIDialect/>'dlti' Dialect</a></li><li><a href=/docs/Dialects/EmitC/>'emitc' Dialect</a></li><li><a href=/docs/Dialects/Func/>'func' Dialect</a></li><li><a href=/docs/Dialects/GPU/>'gpu' Dialect</a></li><li class=has-sub-menu><a href=/docs/Dialects/Linalg/>'linalg' Dialect<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Dialects/Linalg/OpDSL/>Linalg OpDSL</a></li></ul></li><li><a href=/docs/Dialects/LLVM/>'llvm' Dialect</a></li><li><a href=/docs/Dialects/MathOps/>'math' Dialect</a></li><li><a href=/docs/Dialects/MemRef/>'memref' Dialect</a></li><li><a href=/docs/Dialects/MLProgramOps/>'ml_program' Dialect</a></li><li><a href=/docs/Dialects/NVGPU/>'nvgpu' Dialect</a></li><li><a href=/docs/Dialects/NVVMDialect/>'nvvm' Dialect</a></li><li><a href=/docs/Dialects/OpenMPDialect/>'omp' Dialect</a></li><li><a href=/docs/Dialects/PDLOps/>'pdl' Dialect</a></li><li><a href=/docs/Dialects/PDLInterpOps/>'pdl_interp' Dialect</a></li><li><a href=/docs/Dialects/QuantDialect/>'quant' Dialect</a></li><li><a href=/docs/Dialects/ROCDLDialect/>'rocdl' Dialect</a></li><li><a href=/docs/Dialects/SCFDialect/>'scf' Dialect</a></li><li><a href=/docs/Dialects/ShapeDialect/>'shape' Dialect</a></li><li><a href=/docs/Dialects/SparseTensorOps/>'sparse_tensor' Dialect</a></li><li><a href=/docs/Dialects/SPIR-V/>'spv' Dialect</a></li><li><a href=/docs/Dialects/TensorOps/>'tensor' Dialect</a></li><li><a href=/docs/Dialects/Vector/>'vector' Dialect</a></li><li><a href=/docs/Dialects/X86Vector/>'x86vector' Dialect</a></li><li><a href=/docs/Dialects/Builtin/>Builtin Dialect</a></li><li><a href=/docs/Dialects/TOSA/>Tensor Operator Set Architecture (TOSA) Dialect</a></li><li class=active><a href=/docs/Dialects/Transform/>Transform Dialect</a></li></ul></li><li><a href=/docs/ExtensibleDialects/>Extensible dialects</a></li><li><a href=/docs/Interfaces/>Interfaces</a></li><li><a href=/docs/TargetLLVMIR/>LLVM IR Target</a></li><li><a href=/docs/CAPI/>MLIR C API</a></li><li><a href=/docs/LangRef/>MLIR Language Reference</a></li><li><a href=/docs/Canonicalization/>Operation Canonicalization</a></li><li><a href=/docs/OpDefinitions/>Operation Definition Specification (ODS)</a></li><li><a href=/docs/PassManagement/>Pass Infrastructure</a></li><li><a href=/docs/Passes/>Passes</a></li><li><a href=/docs/PatternRewriter/>Pattern Rewriting : Generic DAG-to-DAG Rewriting</a></li><li><a href=/docs/PDLL/>PDLL - PDL Language</a></li><li><a href=/docs/Quantization/>Quantization</a></li><li class=has-sub-menu><a href=/docs/Rationale/>Rationale<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Rationale/RationaleGenericDAGRewriter/>Generic DAG Rewriter Infrastructure Rationale</a></li><li><a href=/docs/Rationale/RationaleLinalgDialect/>Linalg Dialect Rationale: The Case For Compiler-Friendly Custom Operations</a></li><li><a href=/docs/Rationale/Rationale/>MLIR Rationale</a></li><li><a href=/docs/Rationale/MLIRForGraphAlgorithms/>MLIR: Incremental Application to Graph Algorithms in ML Frameworks</a></li><li><a href=/docs/Rationale/RationaleSimplifiedPolyhedralForm/>MLIR: The case for a simplified polyhedral form</a></li><li><a href=/docs/Rationale/UsageOfConst/>Usage of 'const' in MLIR, for core IR types</a></li></ul></li><li><a href=/docs/ShapeInference/>Shape Inference</a></li><li><a href=/docs/SPIRVToLLVMDialectConversion/>SPIR-V Dialect to LLVM Dialect conversion manual</a></li><li><a href=/docs/SymbolsAndSymbolTables/>Symbols and Symbol Tables</a></li><li><a href=/docs/DeclarativeRewrites/>Table-driven Declarative Rewrite Rule (DRR)</a></li><li><a href=/docs/Traits/>Traits</a></li><li class=has-sub-menu><a href=/docs/Tutorials/>Tutorials<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tutorials/CreatingADialect/>Creating a Dialect</a></li><li><a href=/docs/Tutorials/QuickstartRewrites/>Quickstart tutorial to adding MLIR graph rewrite</a></li><li class=has-sub-menu><a href=/docs/Tutorials/Toy/>Toy Tutorial<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tutorials/Toy/Ch-1/>Chapter 1: Toy Language and AST</a></li><li><a href=/docs/Tutorials/Toy/Ch-2/>Chapter 2: Emitting Basic MLIR</a></li><li><a href=/docs/Tutorials/Toy/Ch-3/>Chapter 3: High-level Language-Specific Analysis and Transformation</a></li><li><a href=/docs/Tutorials/Toy/Ch-4/>Chapter 4: Enabling Generic Transformation with Interfaces</a></li><li><a href=/docs/Tutorials/Toy/Ch-5/>Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a></li><li><a href=/docs/Tutorials/Toy/Ch-6/>Chapter 6: Lowering to LLVM and CodeGeneration</a></li><li><a href=/docs/Tutorials/Toy/Ch-7/>Chapter 7: Adding a Composite Type to Toy</a></li></ul></li><li><a href=/docs/Tutorials/UnderstandingTheIRStructure/>Understanding the IR Structure</a></li><li><a href=/docs/Tutorials/DataFlowAnalysis/>Writing DataFlow Analyses in MLIR</a></li></ul></li></ul></li></ul></nav><div class=sidebar-footer></div></div></div><a href=# id=backtothetop-fixed class=backtothetop data-backtothetop-duration=600 data-backtothetop-easing=easeOutQuart data-backtothetop-fixed-fadein=1000 data-backtothetop-fixed-fadeout=1000 data-backtothetop-fixed-bottom=10 data-backtothetop-fixed-right=20><span class="fa-layers fa-fw"><i class="fas fa-circle"></i><i class="fas fa-arrow-circle-up"></i></span></a></div></body></html>

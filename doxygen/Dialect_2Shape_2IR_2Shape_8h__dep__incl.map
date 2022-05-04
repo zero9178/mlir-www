@@ -1,0 +1,12 @@
+<map id="include/mlir/Dialect/Shape/IR/Shape.h" name="include/mlir/Dialect/Shape/IR/Shape.h">
+<area shape="rect" id="node2" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,102,212,129"/>
+<area shape="rect" id="node4" href="$CAPI_2Dialect_2Shape_8cpp.html" title="lib/CAPI/Dialect/Shape.cpp" alt="" coords="236,102,429,129"/>
+<area shape="rect" id="node5" href="$ConvertShapeConstraints_8cpp.html" title="lib/Conversion/ShapeToStandard\l/ConvertShapeConstraints.cpp" alt="" coords="453,95,684,136"/>
+<area shape="rect" id="node6" href="$ShapeToStandard_8cpp.html" title="lib/Conversion/ShapeToStandard\l/ShapeToStandard.cpp" alt="" coords="708,95,939,136"/>
+<area shape="rect" id="node7" href="$Dialect_2Shape_2IR_2Shape_8cpp.html" title="lib/Dialect/Shape/IR\l/Shape.cpp" alt="" coords="963,95,1113,136"/>
+<area shape="rect" id="node8" href="$Shape_2Transforms_2BufferizableOpInterfaceImpl_8cpp.html" title="lib/Dialect/Shape/Transforms\l/BufferizableOpInterfaceImpl.cpp" alt="" coords="1137,95,1373,136"/>
+<area shape="rect" id="node9" href="$Shape_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Shape/Transforms\l/Bufferize.cpp" alt="" coords="1398,95,1606,136"/>
+<area shape="rect" id="node10" href="$RemoveShapeConstraints_8cpp.html" title="lib/Dialect/Shape/Transforms\l/RemoveShapeConstraints.cpp" alt="" coords="1631,95,1851,136"/>
+<area shape="rect" id="node11" href="$ShapeToShapeLowering_8cpp.html" title="lib/Dialect/Shape/Transforms\l/ShapeToShapeLowering.cpp" alt="" coords="1875,95,2083,136"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,184,186,225"/>
+</map>

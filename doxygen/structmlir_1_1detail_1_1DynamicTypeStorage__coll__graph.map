@@ -1,0 +1,8 @@
+<map id="mlir::detail::DynamicTypeStorage" name="mlir::detail::DynamicTypeStorage">
+<area shape="rect" id="node2" href="$classmlir_1_1TypeStorage.html" title="Base storage class appearing in a Type. " alt="" coords="20,117,156,143"/>
+<area shape="rect" id="node3" href="$classmlir_1_1StorageUniquer_1_1BaseStorage.html" title="This class acts as the base storage that all storage classes must derived from. " alt="" coords="5,5,163,47"/>
+<area shape="rect" id="node4" href="$classllvm_1_1ArrayRef.html" title="llvm::ArrayRef\&lt; mlir\l::Attribute \&gt;" alt="" coords="183,109,339,151"/>
+<area shape="rect" id="node5" href="$classllvm_1_1ArrayRef.html" title="llvm::ArrayRef\&lt; T \&gt;" alt="" coords="187,13,341,39"/>
+<area shape="rect" id="node6" href="$classmlir_1_1DynamicTypeDefinition.html" title="The definition of a dynamic type. " alt="" coords="363,117,570,143"/>
+<area shape="rect" id="node7" href="$classmlir_1_1SelfOwningTypeID.html" title="Defines a TypeID for each instance of this class by using a pointer to the instance. " alt="" coords="379,13,554,39"/>
+</map>

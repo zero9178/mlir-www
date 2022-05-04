@@ -1,0 +1,16 @@
+<map id="include/mlir/Dialect/SparseTensor/IR/SparseTensor.h" name="include/mlir/Dialect/SparseTensor/IR/SparseTensor.h">
+<area shape="rect" id="node2" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,102,212,129"/>
+<area shape="rect" id="node4" href="$SparseTensor_8cpp.html" title="lib/CAPI/Dialect/SparseTensor.cpp" alt="" coords="236,102,475,129"/>
+<area shape="rect" id="node5" href="$LinalgOps_8cpp.html" title="lib/Dialect/Linalg\l/IR/LinalgOps.cpp" alt="" coords="499,95,633,136"/>
+<area shape="rect" id="node6" href="$ElementwiseOpFusion_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/ElementwiseOpFusion.cpp" alt="" coords="658,95,930,136"/>
+<area shape="rect" id="node7" href="$SparseTensorRewriting_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/SparseTensorRewriting.cpp" alt="" coords="955,95,1231,136"/>
+<area shape="rect" id="node8" href="$SparseTensorDialect_8cpp.html" title="lib/Dialect/SparseTensor\l/IR/SparseTensorDialect.cpp" alt="" coords="1255,95,1458,136"/>
+<area shape="rect" id="node9" href="$SparseTensorPipelines_8cpp.html" title="lib/Dialect/SparseTensor\l/Pipelines/SparseTensorPipelines.cpp" alt="" coords="1482,95,1743,136"/>
+<area shape="rect" id="node10" href="$CodegenUtils_8h.html" title="lib/Dialect/SparseTensor\l/Transforms/CodegenUtils.h" alt="" coords="1819,95,2020,136"/>
+<area shape="rect" id="node12" href="$SparseTensorConversion_8cpp.html" title="lib/Dialect/SparseTensor\l/Transforms/SparseTensorConversion.cpp" alt="" coords="1499,184,1787,225"/>
+<area shape="rect" id="node13" href="$Sparsification_8cpp.html" title="lib/Dialect/SparseTensor\l/Transforms/Sparsification.cpp" alt="" coords="2052,184,2269,225"/>
+<area shape="rect" id="node14" href="$Dialect_2SparseTensor_2Transforms_2SparseTensorPasses_8cpp.html" title="lib/Dialect/SparseTensor\l/Transforms/SparseTensorPasses.cpp" alt="" coords="2095,95,2354,136"/>
+<area shape="rect" id="node15" href="$Merger_8cpp.html" title="lib/Dialect/SparseTensor\l/Utils/Merger.cpp" alt="" coords="2378,95,2557,136"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,184,186,225"/>
+<area shape="rect" id="node11" href="$CodegenUtils_8cpp.html" title="lib/Dialect/SparseTensor\l/Transforms/CodegenUtils.cpp" alt="" coords="1811,184,2027,225"/>
+</map>

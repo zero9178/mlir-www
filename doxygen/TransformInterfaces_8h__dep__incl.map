@@ -1,0 +1,11 @@
+<map id="include/mlir/Dialect/Transform/IR/TransformInterfaces.h" name="include/mlir/Dialect/Transform/IR/TransformInterfaces.h">
+<area shape="rect" id="node2" href="$LinalgTransformOps_8h.html" title="include/mlir/Dialect\l/Linalg/TransformOps\l/LinalgTransformOps.h" alt="" coords="67,95,233,151"/>
+<area shape="rect" id="node6" href="$TransformDialect_8h.html" title="include/mlir/Dialect\l/Transform/IR/TransformDialect.h" alt="" coords="258,102,493,143"/>
+<area shape="rect" id="node8" href="$TransformOps_8cpp.html" title="lib/Dialect/Transform\l/IR/TransformOps.cpp" alt="" coords="690,206,850,247"/>
+<area shape="rect" id="node9" href="$TransformOps_8h.html" title="include/mlir/Dialect\l/Transform/IR/TransformOps.h" alt="" coords="517,102,732,143"/>
+<area shape="rect" id="node10" href="$TransformInterfaces_8cpp.html" title="lib/Dialect/Transform\l/IR/TransformInterfaces.cpp" alt="" coords="807,102,1007,143"/>
+<area shape="rect" id="node3" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,213,212,240"/>
+<area shape="rect" id="node5" href="$LinalgTransformOps_8cpp.html" title="lib/Dialect/Linalg\l/TransformOps/LinalgTransform\lOps.cpp" alt="" coords="237,199,461,255"/>
+<area shape="rect" id="node4" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,303,186,344"/>
+<area shape="rect" id="node7" href="$TransformDialect_8cpp.html" title="lib/Dialect/Transform\l/IR/TransformDialect.cpp" alt="" coords="485,206,666,247"/>
+</map>

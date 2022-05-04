@@ -1,0 +1,6 @@
+<map id="mlir::presburger::IntegerPolyhedron" name="mlir::presburger::IntegerPolyhedron">
+<area shape="rect" id="node2" href="$classmlir_1_1presburger_1_1IntegerRelation.html" title="An IntegerRelation represents the set of points from a PresburgerSpace that satisfy a list of affine ..." alt="" coords="216,124,396,165"/>
+<area shape="rect" id="node3" href="$classmlir_1_1presburger_1_1Matrix.html" title="This is a class to represent a resizable matrix. " alt="" coords="5,13,180,39"/>
+<area shape="rect" id="node4" href="$classmlir_1_1presburger_1_1PresburgerSpace.html" title="PresburgerSpace is the space of all possible values of a tuple of integer valued variables/identifier..." alt="" coords="204,5,408,47"/>
+<area shape="rect" id="node5" href="$classunsigned.html" title="unsigned" alt="" coords="432,13,513,39"/>
+</map>

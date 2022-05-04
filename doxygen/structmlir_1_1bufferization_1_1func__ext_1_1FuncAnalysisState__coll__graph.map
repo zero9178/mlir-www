@@ -1,0 +1,7 @@
+<map id="mlir::bufferization::func_ext::FuncAnalysisState" name="mlir::bufferization::func_ext::FuncAnalysisState">
+<area shape="rect" id="node2" href="$structmlir_1_1bufferization_1_1DialectAnalysisState.html" title="Dialect&#45;specific analysis state. " alt="" coords="473,5,638,47"/>
+<area shape="rect" id="node3" href="$classllvm_1_1DenseMap.html" title="llvm::DenseMap\&lt; FuncOp,\l FuncOpAnalysisState \&gt;" alt="" coords="459,71,652,112"/>
+<area shape="rect" id="node4" href="$classllvm_1_1DenseMap.html" title="llvm::DenseMap\&lt; KeyT,\l ValueT, KeyInfoT, BucketT \&gt;" alt="" coords="5,136,216,177"/>
+<area shape="rect" id="node5" href="$classllvm_1_1DenseMap.html" title="llvm::DenseMap\&lt; FuncOp,\l llvm::DenseMap \&gt;" alt="" coords="459,136,652,177"/>
+<area shape="rect" id="node6" href="$classllvm_1_1DenseMap.html" title="llvm::DenseMap\&lt; FuncOp,\l llvm::DenseSet \&gt;" alt="" coords="459,201,652,243"/>
+</map>

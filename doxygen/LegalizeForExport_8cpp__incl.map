@@ -1,0 +1,32 @@
+<map id="lib/Dialect/LLVMIR/Transforms/LegalizeForExport.cpp" name="lib/Dialect/LLVMIR/Transforms/LegalizeForExport.cpp">
+<area shape="rect" id="node2" href="$LegalizeForExport_8h.html" title="mlir/Dialect/LLVMIR\l/Transforms/LegalizeForExport.h" alt="" coords="1041,437,1271,479"/>
+<area shape="rect" id="node4" href="$lib_2Dialect_2LLVMIR_2Transforms_2PassDetail_8h.html" title="PassDetail.h" alt="" coords="618,102,721,129"/>
+<area shape="rect" id="node14" href="$LLVMDialect_8h.html" title="mlir/Dialect/LLVMIR\l/LLVMDialect.h" alt="" coords="2746,95,2894,136"/>
+<area shape="rect" id="node26" href="$BuiltinOps_8h.html" title="mlir/IR/BuiltinOps.h" alt="" coords="1459,191,1607,218"/>
+<area shape="rect" id="node35" href="$Builders_8h.html" title="mlir/IR/Builders.h" alt="" coords="4045,281,4179,307"/>
+<area shape="rect" id="node49" href="$Block_8h.html" title="mlir/IR/Block.h" alt="" coords="893,102,1011,129"/>
+<area shape="rect" id="node5" href="$include_2mlir_2Pass_2Pass_8h.html" title="mlir/Pass/Pass.h" alt="" coords="427,191,554,218"/>
+<area shape="rect" id="node6" href="$AnalysisManager_8h.html" title="mlir/Pass/AnalysisManager.h" alt="" coords="43,281,250,307"/>
+<area shape="rect" id="node7" href="$PassRegistry_8h.html" title="mlir/Pass/PassRegistry.h" alt="" coords="685,363,862,389"/>
+<area shape="rect" id="node10" href="$LogicalResult_8h.html" title="mlir/Support/LogicalResult.h" alt="" coords="710,281,914,307"/>
+<area shape="rect" id="node8" href="$TypeID_8h.html" title="mlir/Support/TypeID.h" alt="" coords="1220,527,1383,553"/>
+<area shape="rect" id="node15" href="$LLVMTypes_8h.html" title="mlir/Dialect/LLVMIR\l/LLVMTypes.h" alt="" coords="1734,184,1882,225"/>
+<area shape="rect" id="node16" href="$IR_2Types_8h.html" title="mlir/IR/Types.h" alt="" coords="2741,601,2859,628"/>
+<area shape="rect" id="node17" href="$TypeSupport_8h.html" title="mlir/IR/TypeSupport.h" alt="" coords="3537,683,3698,710"/>
+<area shape="rect" id="node19" href="$OpDefinition_8h.html" title="mlir/IR/OpDefinition.h" alt="" coords="2837,363,3000,389"/>
+<area shape="rect" id="node20" href="$IR_2Dialect_8h.html" title="mlir/IR/Dialect.h" alt="" coords="2889,445,3015,471"/>
+<area shape="rect" id="node27" href="$OpImplementation_8h.html" title="mlir/IR/OpImplementation.h" alt="" coords="1915,281,2117,307"/>
+<area shape="rect" id="node32" href="$SideEffectInterfaces_8h.html" title="mlir/Interfaces/SideEffect\lInterfaces.h" alt="" coords="2141,273,2328,315"/>
+<area shape="rect" id="node34" href="$FunctionInterfaces_8h.html" title="mlir/IR/FunctionInterfaces.h" alt="" coords="3789,191,3989,218"/>
+<area shape="rect" id="node37" href="$ControlFlowInterfaces_8h.html" title="mlir/Interfaces/ControlFlow\lInterfaces.h" alt="" coords="3514,273,3713,315"/>
+<area shape="rect" id="node38" href="$InferTypeOpInterface_8h.html" title="mlir/Interfaces/InferType\lOpInterface.h" alt="" coords="4064,184,4245,225"/>
+<area shape="rect" id="node18" href="$DataLayoutInterfaces_8h.html" title="mlir/Interfaces/DataLayout\lInterfaces.h" alt="" coords="2353,273,2549,315"/>
+<area shape="rect" id="node21" href="$DialectRegistry_8h.html" title="mlir/IR/DialectRegistry.h" alt="" coords="2968,527,3147,553"/>
+<area shape="rect" id="node23" href="$OperationSupport_8h.html" title="mlir/IR/OperationSupport.h" alt="" coords="2568,527,2763,553"/>
+<area shape="rect" id="node24" href="$BlockSupport_8h.html" title="mlir/IR/BlockSupport.h" alt="" coords="2217,601,2383,628"/>
+<area shape="rect" id="node28" href="$OwningOpRef_8h.html" title="mlir/IR/OwningOpRef.h" alt="" coords="1040,281,1208,307"/>
+<area shape="rect" id="node29" href="$RegionKindInterface_8h.html" title="mlir/IR/RegionKindInterface.h" alt="" coords="1427,281,1639,307"/>
+<area shape="rect" id="node30" href="$SymbolTable_8h.html" title="mlir/IR/SymbolTable.h" alt="" coords="2889,281,3053,307"/>
+<area shape="rect" id="node31" href="$CastInterfaces_8h.html" title="mlir/Interfaces/CastInterfaces.h" alt="" coords="1664,281,1891,307"/>
+<area shape="rect" id="node50" href="$Visitors_8h.html" title="mlir/IR/Visitors.h" alt="" coords="784,191,915,218"/>
+</map>

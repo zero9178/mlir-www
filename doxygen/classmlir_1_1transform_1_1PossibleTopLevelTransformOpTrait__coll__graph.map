@@ -1,0 +1,4 @@
+<map id="mlir::transform::PossibleTopLevelTransformOpTrait&lt; OpTy &gt;" name="mlir::transform::PossibleTopLevelTransformOpTrait&lt; OpTy &gt;">
+<area shape="rect" id="node2" href="$classmlir_1_1OpTrait_1_1TraitBase.html" title="mlir::OpTrait::TraitBase\l\&lt; OpTy, PossibleTopLevelTransform\lOpTrait \&gt;" alt="" coords="5,124,259,180"/>
+<area shape="rect" id="node3" href="$classmlir_1_1OpTrait_1_1TraitBase.html" title="Helper class for implementing traits. " alt="" coords="29,5,235,47"/>
+</map>

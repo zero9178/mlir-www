@@ -1,0 +1,6 @@
+<map id="include/mlir/Dialect/Bufferization/Transforms/FuncBufferizableOpInterfaceImpl.h" name="include/mlir/Dialect/Bufferization/Transforms/FuncBufferizableOpInterfaceImpl.h">
+<area shape="rect" id="node2" href="$InitAllDialects_8h.html" title="include/mlir/InitAllDialects.h" alt="" coords="5,124,212,151"/>
+<area shape="rect" id="node4" href="$FuncBufferizableOpInterfaceImpl_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/FuncBufferizableOp\lInterfaceImpl.cpp" alt="" coords="237,109,463,165"/>
+<area shape="rect" id="node5" href="$OneShotModuleBufferize_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/OneShotModuleBufferize.cpp" alt="" coords="488,117,777,158"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="31,213,186,255"/>
+</map>

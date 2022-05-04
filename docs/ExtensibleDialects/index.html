@@ -1,0 +1,236 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>Extensible dialects - MLIR</title><meta name=description content="Multi-Level IR Compiler Framework"><meta name=generator content="Hugo 0.80.0"><link href=https://mlir.llvm.org/index.xml rel=alternate type=application/rss+xml><link rel=canonical href=https://mlir.llvm.org/docs/ExtensibleDialects/><link rel=stylesheet href=https://mlir.llvm.org/css/theme.css><script src=https://use.fontawesome.com/releases/v5.0.6/js/all.js></script><link rel=stylesheet href=https://mlir.llvm.org/css/chroma.min.css><script src=https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js></script><script src=https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js></script><script src=https://mlir.llvm.org/js/bundle.js></script><script type=text/javascript src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type=text/x-mathjax-config>
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$', '$'] ],
+      displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    }
+  });
+</script><link rel=apple-touch-icon sizes=180x180 href="/apple-touch-icon.png?v=1"><link rel=icon type=image/png sizes=32x32 href="/favicon-32x32.png?v=1"><link rel=icon type=image/png sizes=16x16 href="/favicon-16x16.png?v=1"><link rel=manifest href="/site.webmanifest?v=1"><link rel=mask-icon href="/safari-pinned-tab.svg?v=1" color=#3775e0><link rel="shortcut icon" href="/favicon.ico?v=1"><meta name=msapplication-TileColor content="#2d89ef"><meta name=theme-color content="#ffffff"><link rel=icon href=/favicon.svg type=image/svg+xml sizes=any><style>:root{}</style></head><body><div class=container><header><h1><div><img src=https://mlir.llvm.org//mlir-logo.png width=40px align=absmiddle>
+MLIR</div></h1><p class=description>Multi-Level IR Compiler Framework</p></header><div class=global-menu><nav><ul><li class=parent><a href>Community<i class="fas fa-angle-right"></i></a><ul class=sub-menu><li class=child><a href=https://llvm.discourse.group/c/mlir/31>Forums</a></li><li class=child><a href=https://discord.gg/xS7Z362>Chat</a></li></ul></li><li><a href=/getting_started/Debugging/>Debugging Tips</a></li><li><a href=/getting_started/Faq/>FAQ</a></li><li class=parent><a href=https://github.com/llvm/llvm-project/tree/main/mlir>Source<i class="fas fa-angle-right"></i></a><ul class=sub-menu><li class=child><a href=/doxygen/>Doxygen</a></li><li class=child><a href=https://github.com/llvm/llvm-project/tree/main/mlir>GitHub</a></li></ul></li><li><a href="https://bugs.llvm.org/buglist.cgi?bug_status=__open__&list_id=177877&order=changeddate%20DESC%2Cpriority%2Cbug_severity&product=MLIR&query_format=specific">Bugs</a></li><li><a href=https://github.com/llvm/mlir-www/tree/main/website/static/LogoAssets>Logo Assets</a></li><li><a href=https://www.youtube.com/MLIRCompiler>Youtube Channel</a></li></ul></nav></div><div class=content-container><main><h1>Extensible dialects</h1><p>This file documents the design and API of the extensible dialects. Extensible
+dialects are dialects that can be extended with new operations and types defined
+at runtime. This allows for users to define dialects via with meta-programming,
+or from another language, without having to recompile C++ code.</p><p><nav id=TableOfContents><ul><li><a href=#usage>Usage</a><ul><li><a href=#defining-an-extensible-dialect>Defining an extensible dialect</a></li><li><a href=#defining-an-operation-at-runtime>Defining an operation at runtime</a></li><li><a href=#using-an-operation-defined-at-runtime>Using an operation defined at runtime</a></li><li><a href=#defining-a-type-at-runtime>Defining a type at runtime</a></li><li><a href=#parsing-types-defined-at-runtime-in-an-extensible-dialect>Parsing types defined at runtime in an extensible dialect</a></li><li><a href=#using-a-type-defined-at-runtime>Using a type defined at runtime</a></li><li><a href=#defining-an-attribute-at-runtime>Defining an attribute at runtime</a></li><li><a href=#parsing-attributes-defined-at-runtime-in-an-extensible-dialect>Parsing attributes defined at runtime in an extensible dialect</a></li><li><a href=#using-an-attribute-defined-at-runtime>Using an attribute defined at runtime</a></li></ul></li><li><a href=#implementation-details>Implementation details</a><ul><li><a href=#extensible-dialect>Extensible dialect</a></li><li><a href=#operation-representation-and-registration>Operation representation and registration</a></li><li><a href=#type-representation-and-registration>Type representation and registration</a></li></ul></li></ul></nav><h2 id=usage>Usage&nbsp;<a class=headline-hash href=#usage>¶</a></h2><h3 id=defining-an-extensible-dialect>Defining an extensible dialect&nbsp;<a class=headline-hash href=#defining-an-extensible-dialect>¶</a></h3><p>Dialects defined in C++ can be extended with new operations, types, etc., at
+runtime by inheriting from <code>mlir::ExtensibleDialect</code> instead of <code>mlir::Dialect</code>
+(note that <code>ExtensibleDialect</code> inherits from <code>Dialect</code>). The <code>ExtensibleDialect</code>
+class contains the necessary fields and methods to extend the dialect at
+runtime.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>class</span> <span class=nc>MyDialect</span> <span class=o>:</span> <span class=k>public</span> <span class=n>mlir</span><span class=o>::</span><span class=n>ExtensibleDialect</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>For dialects defined in TableGen, this is done by setting the <code>isExtensible</code>
+flag to <code>1</code>.</p><div class=highlight><pre class=chroma><code class=language-tablegen data-lang=tablegen><span class=k>def</span> <span class=nv>Test_Dialect</span> <span class=p>:</span> <span class=nv>Dialect</span> <span class=p>{</span>
+  <span class=k>let</span> <span class=nv>isExtensible</span> <span class=p>=</span> <span class=m>1</span><span class=p>;</span>
+  <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>An extensible <code>Dialect</code> can be casted back to <code>ExtensibleDialect</code> using
+<code>llvm::dyn_cast</code>, or <code>llvm::cast</code>:</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>if</span> <span class=p>(</span><span class=k>auto</span> <span class=n>extensibleDialect</span> <span class=o>=</span> <span class=n>llvm</span><span class=o>::</span><span class=n>dyn_cast</span><span class=o>&lt;</span><span class=n>ExtensibleDialect</span><span class=o>&gt;</span><span class=p>(</span><span class=n>dialect</span><span class=p>))</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=defining-an-operation-at-runtime>Defining an operation at runtime&nbsp;<a class=headline-hash href=#defining-an-operation-at-runtime>¶</a></h3><p>The <code>DynamicOpDefinition</code> class represents the definition of an operation
+defined at runtime. It is created using the <code>DynamicOpDefinition::get</code>
+functions. An operation defined at runtime must provide a name, a dialect in
+which the operation will be registered in, an operation verifier. It may also
+optionally define a custom parser and a printer, fold hook, and more.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// The operation name, without the dialect name prefix.
+</span><span class=c1></span><span class=n>StringRef</span> <span class=n>name</span> <span class=o>=</span> <span class=s>&#34;my_operation_name&#34;</span><span class=p>;</span>
+
+<span class=c1>// The dialect defining the operation.
+</span><span class=c1></span><span class=n>Dialect</span><span class=o>*</span> <span class=n>dialect</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>getOrLoadDialect</span><span class=o>&lt;</span><span class=n>MyDialect</span><span class=o>&gt;</span><span class=p>();</span>
+
+<span class=c1>// Operation verifier definition.
+</span><span class=c1></span><span class=n>AbstractOperation</span><span class=o>::</span><span class=n>VerifyInvariantsFn</span> <span class=n>verifyFn</span> <span class=o>=</span> <span class=p>[](</span><span class=n>Operation</span><span class=o>*</span> <span class=n>op</span><span class=p>)</span> <span class=p>{</span>
+    <span class=c1>// Logic for the operation verification.
+</span><span class=c1></span>    <span class=p>...</span>
+<span class=p>}</span>
+
+<span class=c1>// Parser function definition.
+</span><span class=c1></span><span class=n>AbstractOperation</span><span class=o>::</span><span class=n>ParseAssemblyFn</span> <span class=n>parseFn</span> <span class=o>=</span>
+    <span class=p>[](</span><span class=n>OpAsmParser</span> <span class=o>&amp;</span><span class=n>parser</span><span class=p>,</span> <span class=n>OperationState</span> <span class=o>&amp;</span><span class=n>state</span><span class=p>)</span> <span class=p>{</span>
+        <span class=c1>// Parse the operation, given that the name is already parsed.
+</span><span class=c1></span>        <span class=p>...</span>    
+<span class=p>};</span>
+
+<span class=c1>// Printer function
+</span><span class=c1></span><span class=k>auto</span> <span class=n>printFn</span> <span class=o>=</span> <span class=p>[](</span><span class=n>Operation</span> <span class=o>*</span><span class=n>op</span><span class=p>,</span> <span class=n>OpAsmPrinter</span> <span class=o>&amp;</span><span class=n>printer</span><span class=p>)</span> <span class=p>{</span>
+        <span class=n>printer</span> <span class=o>&lt;&lt;</span> <span class=n>op</span><span class=o>-&gt;</span><span class=n>getName</span><span class=p>();</span>
+        <span class=c1>// Print the operation, given that the name is already printed.
+</span><span class=c1></span>        <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// General folder implementation, see AbstractOperation::foldHook for more
+</span><span class=c1>// information.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>foldHookFn</span> <span class=o>=</span> <span class=p>[](</span><span class=n>Operation</span> <span class=o>*</span> <span class=n>op</span><span class=p>,</span> <span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>operands</span><span class=p>,</span> 
+                                   <span class=n>SmallVectorImpl</span><span class=o>&lt;</span><span class=n>OpFoldResult</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>result</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// Returns any canonicalization pattern rewrites that the operation
+</span><span class=c1>// supports, for use by the canonicalization pass.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>getCanonicalizationPatterns</span> <span class=o>=</span> 
+        <span class=p>[](</span><span class=n>RewritePatternSet</span> <span class=o>&amp;</span><span class=n>results</span><span class=p>,</span> <span class=n>MLIRContext</span> <span class=o>*</span><span class=n>context</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+
+<span class=c1>// Definition of the operation.
+</span><span class=c1></span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>DynamicOpDefinition</span><span class=o>&gt;</span> <span class=n>opDef</span> <span class=o>=</span>
+    <span class=n>DynamicOpDefinition</span><span class=o>::</span><span class=n>get</span><span class=p>(</span><span class=n>name</span><span class=p>,</span> <span class=n>dialect</span><span class=p>,</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>verifyFn</span><span class=p>),</span>
+        <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>parseFn</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>printFn</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>foldHookFn</span><span class=p>),</span>
+        <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>getCanonicalizationPatterns</span><span class=p>));</span>
+</code></pre></div><p>Once the operation is defined, it can be registered by an <code>ExtensibleDialect</code>:</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>extensibleDialect</span><span class=o>-&gt;</span><span class=n>registerDynamicOperation</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>opDef</span><span class=p>));</span>
+</code></pre></div><p>Note that the <code>Dialect</code> given to the operation should be the one registering
+the operation.</p><h3 id=using-an-operation-defined-at-runtime>Using an operation defined at runtime&nbsp;<a class=headline-hash href=#using-an-operation-defined-at-runtime>¶</a></h3><p>It is possible to match on an operation defined at runtime using their names:</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>if</span> <span class=p>(</span><span class=n>op</span><span class=o>-&gt;</span><span class=n>getName</span><span class=p>().</span><span class=n>getStringRef</span><span class=p>()</span> <span class=o>==</span> <span class=s>&#34;my_dialect.my_dynamic_op&#34;</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><p>An operation defined at runtime can be created by instantiating an
+<code>OperationState</code> with the operation name, and using it with a rewriter
+(for instance a <code>PatternRewriter</code>) to create the operation.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>OperationState</span> <span class=nf>state</span><span class=p>(</span><span class=n>location</span><span class=p>,</span> <span class=s>&#34;my_dialect.my_dynamic_op&#34;</span><span class=p>,</span>
+                     <span class=n>operands</span><span class=p>,</span> <span class=n>resultTypes</span><span class=p>,</span> <span class=n>attributes</span><span class=p>);</span>
+
+<span class=n>rewriter</span><span class=p>.</span><span class=n>createOperation</span><span class=p>(</span><span class=n>state</span><span class=p>);</span>
+</code></pre></div><h3 id=defining-a-type-at-runtime>Defining a type at runtime&nbsp;<a class=headline-hash href=#defining-a-type-at-runtime>¶</a></h3><p>Contrary to types defined in C++ or in TableGen, types defined at runtime can
+only have as argument a list of <code>Attribute</code>.</p><p>Similarily to operations, a type is defined at runtime using the class
+<code>DynamicTypeDefinition</code>, which is created using the <code>DynamicTypeDefinition::get</code>
+functions. A type definition requires a name, the dialect that will register the
+type, and a parameter verifier. It can also define optionally a custom parser
+and printer for the arguments (the type name is assumed to be already
+parsed/printed).</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// The type name, without the dialect name prefix.
+</span><span class=c1></span><span class=n>StringRef</span> <span class=n>name</span> <span class=o>=</span> <span class=s>&#34;my_type_name&#34;</span><span class=p>;</span>
+
+<span class=c1>// The dialect defining the type.
+</span><span class=c1></span><span class=n>Dialect</span><span class=o>*</span> <span class=n>dialect</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>getOrLoadDialect</span><span class=o>&lt;</span><span class=n>MyDialect</span><span class=o>&gt;</span><span class=p>();</span>
+
+<span class=c1>// The type verifier.
+</span><span class=c1>// A type defined at runtime has a list of attributes as parameters.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>verifier</span> <span class=o>=</span> <span class=p>[](</span><span class=n>function_ref</span><span class=o>&lt;</span><span class=n>InFlightDiagnostic</span><span class=p>()</span><span class=o>&gt;</span> <span class=n>emitError</span><span class=p>,</span>
+                   <span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>args</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// The type parameters parser.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>parser</span> <span class=o>=</span> <span class=p>[](</span><span class=n>DialectAsmParser</span> <span class=o>&amp;</span><span class=n>parser</span><span class=p>,</span>
+                 <span class=n>llvm</span><span class=o>::</span><span class=n>SmallVectorImpl</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>parsedParams</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// The type parameters printer.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>printer</span> <span class=o>=</span><span class=p>[](</span><span class=n>DialectAsmPrinter</span> <span class=o>&amp;</span><span class=n>printer</span><span class=p>,</span> <span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>params</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>DynamicTypeDefinition</span><span class=o>&gt;</span> <span class=n>typeDef</span> <span class=o>=</span>
+    <span class=n>DynamicTypeDefinition</span><span class=o>::</span><span class=n>get</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>name</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>dialect</span><span class=p>),</span>
+                               <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>verifier</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>printer</span><span class=p>),</span>
+                               <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>parser</span><span class=p>));</span>
+</code></pre></div><p>If the printer and the parser are ommited, a default parser and printer is
+generated with the format <code>!dialect.typename&lt;arg1, arg2, ..., argN></code>.</p><p>The type can then be registered by the <code>ExtensibleDialect</code>:</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>dialect</span><span class=o>-&gt;</span><span class=n>registerDynamicType</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>typeDef</span><span class=p>));</span>
+</code></pre></div><h3 id=parsing-types-defined-at-runtime-in-an-extensible-dialect>Parsing types defined at runtime in an extensible dialect&nbsp;<a class=headline-hash href=#parsing-types-defined-at-runtime-in-an-extensible-dialect>¶</a></h3><p><code>parseType</code> methods generated by TableGen can parse types defined at runtime,
+though overriden <code>parseType</code> methods need to add the necessary support for them.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>Type</span> <span class=n>MyDialect</span><span class=o>::</span><span class=n>parseType</span><span class=p>(</span><span class=n>DialectAsmParser</span> <span class=o>&amp;</span><span class=n>parser</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span>
+    <span class=p>...</span>
+    
+    <span class=c1>// The type name.
+</span><span class=c1></span>    <span class=n>StringRef</span> <span class=n>typeTag</span><span class=p>;</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>failed</span><span class=p>(</span><span class=n>parser</span><span class=p>.</span><span class=n>parseKeyword</span><span class=p>(</span><span class=o>&amp;</span><span class=n>typeTag</span><span class=p>)))</span>
+        <span class=k>return</span> <span class=n>Type</span><span class=p>();</span>
+
+    <span class=c1>// Try to parse a dynamic type with &#39;typeTag&#39; name.
+</span><span class=c1></span>    <span class=n>Type</span> <span class=n>dynType</span><span class=p>;</span>
+    <span class=k>auto</span> <span class=n>parseResult</span> <span class=o>=</span> <span class=n>parseOptionalDynamicType</span><span class=p>(</span><span class=n>typeTag</span><span class=p>,</span> <span class=n>parser</span><span class=p>,</span> <span class=n>dynType</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>parseResult</span><span class=p>.</span><span class=n>hasValue</span><span class=p>())</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>succeeded</span><span class=p>(</span><span class=n>parseResult</span><span class=p>.</span><span class=n>getValue</span><span class=p>()))</span>
+            <span class=k>return</span> <span class=n>dynType</span><span class=p>;</span>
+         <span class=k>return</span> <span class=nf>Type</span><span class=p>();</span>
+    <span class=p>}</span>
+    
+    <span class=p>...</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=using-a-type-defined-at-runtime>Using a type defined at runtime&nbsp;<a class=headline-hash href=#using-a-type-defined-at-runtime>¶</a></h3><p>Dynamic types are instances of <code>DynamicType</code>. It is possible to get a dynamic
+type with <code>DynamicType::get</code> and <code>ExtensibleDialect::lookupTypeDefinition</code>.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>auto</span> <span class=n>typeDef</span> <span class=o>=</span> <span class=n>extensibleDialect</span><span class=o>-&gt;</span><span class=n>lookupTypeDefinition</span><span class=p>(</span><span class=s>&#34;my_dynamic_type&#34;</span><span class=p>);</span>
+<span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>params</span> <span class=o>=</span> <span class=p>...;</span>
+<span class=k>auto</span> <span class=n>type</span> <span class=o>=</span> <span class=n>DynamicType</span><span class=o>::</span><span class=n>get</span><span class=p>(</span><span class=n>typeDef</span><span class=p>,</span> <span class=n>params</span><span class=p>);</span>
+</code></pre></div><p>It is also possible to cast a <code>Type</code> known to be defined at runtime to a
+<code>DynamicType</code>.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>auto</span> <span class=n>dynType</span> <span class=o>=</span> <span class=n>type</span><span class=p>.</span><span class=n>cast</span><span class=o>&lt;</span><span class=n>DynamicType</span><span class=o>&gt;</span><span class=p>();</span>
+<span class=k>auto</span> <span class=n>typeDef</span> <span class=o>=</span> <span class=n>dynType</span><span class=p>.</span><span class=n>getTypeDef</span><span class=p>();</span>
+<span class=k>auto</span> <span class=n>args</span> <span class=o>=</span> <span class=n>dynType</span><span class=p>.</span><span class=n>getParams</span><span class=p>();</span>
+</code></pre></div><h3 id=defining-an-attribute-at-runtime>Defining an attribute at runtime&nbsp;<a class=headline-hash href=#defining-an-attribute-at-runtime>¶</a></h3><p>Similar to types defined at runtime, attributes defined at runtime can only have
+as argument a list of <code>Attribute</code>.</p><p>Similarily to types, an attribute is defined at runtime using the class
+<code>DynamicAttrDefinition</code>, which is created using the <code>DynamicAttrDefinition::get</code>
+functions. An attribute definition requires a name, the dialect that will
+register the attribute, and a parameter verifier. It can also define optionally
+a custom parser and printer for the arguments (the attribute name is assumed to
+be already parsed/printed).</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=c1>// The attribute name, without the dialect name prefix.
+</span><span class=c1></span><span class=n>StringRef</span> <span class=n>name</span> <span class=o>=</span> <span class=s>&#34;my_attribute_name&#34;</span><span class=p>;</span>
+
+<span class=c1>// The dialect defining the attribute.
+</span><span class=c1></span><span class=n>Dialect</span><span class=o>*</span> <span class=n>dialect</span> <span class=o>=</span> <span class=n>ctx</span><span class=o>-&gt;</span><span class=n>getOrLoadDialect</span><span class=o>&lt;</span><span class=n>MyDialect</span><span class=o>&gt;</span><span class=p>();</span>
+
+<span class=c1>// The attribute verifier.
+</span><span class=c1>// An attribute defined at runtime has a list of attributes as parameters.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>verifier</span> <span class=o>=</span> <span class=p>[](</span><span class=n>function_ref</span><span class=o>&lt;</span><span class=n>InFlightDiagnostic</span><span class=p>()</span><span class=o>&gt;</span> <span class=n>emitError</span><span class=p>,</span>
+                   <span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>args</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// The attribute parameters parser.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>parser</span> <span class=o>=</span> <span class=p>[](</span><span class=n>DialectAsmParser</span> <span class=o>&amp;</span><span class=n>parser</span><span class=p>,</span>
+                 <span class=n>llvm</span><span class=o>::</span><span class=n>SmallVectorImpl</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=o>&amp;</span><span class=n>parsedParams</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=c1>// The attribute parameters printer.
+</span><span class=c1></span><span class=k>auto</span> <span class=n>printer</span> <span class=o>=</span><span class=p>[](</span><span class=n>DialectAsmPrinter</span> <span class=o>&amp;</span><span class=n>printer</span><span class=p>,</span> <span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>params</span><span class=p>)</span> <span class=p>{</span>
+    <span class=p>...</span>
+<span class=p>};</span>
+
+<span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>DynamicAttrDefinition</span><span class=o>&gt;</span> <span class=n>attrDef</span> <span class=o>=</span>
+    <span class=n>DynamicAttrDefinition</span><span class=o>::</span><span class=n>get</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>name</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>dialect</span><span class=p>),</span>
+                               <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>verifier</span><span class=p>),</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>printer</span><span class=p>),</span>
+                               <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>parser</span><span class=p>));</span>
+</code></pre></div><p>If the printer and the parser are ommited, a default parser and printer is
+generated with the format <code>!dialect.attrname&lt;arg1, arg2, ..., argN></code>.</p><p>The attribute can then be registered by the <code>ExtensibleDialect</code>:</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>dialect</span><span class=o>-&gt;</span><span class=n>registerDynamicAttr</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>typeDef</span><span class=p>));</span>
+</code></pre></div><h3 id=parsing-attributes-defined-at-runtime-in-an-extensible-dialect>Parsing attributes defined at runtime in an extensible dialect&nbsp;<a class=headline-hash href=#parsing-attributes-defined-at-runtime-in-an-extensible-dialect>¶</a></h3><p><code>parseAttribute</code> methods generated by TableGen can parse attributes defined at
+runtime, though overriden <code>parseAttribute</code> methods need to add the necessary
+support for them.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=n>Attribute</span> <span class=n>MyDialect</span><span class=o>::</span><span class=n>parseAttribute</span><span class=p>(</span><span class=n>DialectAsmParser</span> <span class=o>&amp;</span><span class=n>parser</span><span class=p>,</span>
+                                    <span class=n>Type</span> <span class=n>type</span><span class=p>)</span> <span class=k>const</span> <span class=k>override</span> <span class=p>{</span>
+    <span class=p>...</span>
+    <span class=c1>// The attribute name.
+</span><span class=c1></span>    <span class=n>StringRef</span> <span class=n>attrTag</span><span class=p>;</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>failed</span><span class=p>(</span><span class=n>parser</span><span class=p>.</span><span class=n>parseKeyword</span><span class=p>(</span><span class=o>&amp;</span><span class=n>attrTag</span><span class=p>)))</span>
+        <span class=k>return</span> <span class=n>Attribute</span><span class=p>();</span>
+
+    <span class=c1>// Try to parse a dynamic attribute with &#39;attrTag&#39; name.
+</span><span class=c1></span>    <span class=n>Attribute</span> <span class=n>dynAttr</span><span class=p>;</span>
+    <span class=k>auto</span> <span class=n>parseResult</span> <span class=o>=</span> <span class=n>parseOptionalDynamicAttr</span><span class=p>(</span><span class=n>attrTag</span><span class=p>,</span> <span class=n>parser</span><span class=p>,</span> <span class=n>dynAttr</span><span class=p>);</span>
+    <span class=k>if</span> <span class=p>(</span><span class=n>parseResult</span><span class=p>.</span><span class=n>hasValue</span><span class=p>())</span> <span class=p>{</span>
+        <span class=k>if</span> <span class=p>(</span><span class=n>succeeded</span><span class=p>(</span><span class=n>parseResult</span><span class=p>.</span><span class=n>getValue</span><span class=p>()))</span>
+            <span class=k>return</span> <span class=n>dynAttr</span><span class=p>;</span>
+         <span class=k>return</span> <span class=nf>Attribute</span><span class=p>();</span>
+    <span class=p>}</span>
+</code></pre></div><h3 id=using-an-attribute-defined-at-runtime>Using an attribute defined at runtime&nbsp;<a class=headline-hash href=#using-an-attribute-defined-at-runtime>¶</a></h3><p>Similar to types, attributes defined at runtime are instances of <code>DynamicAttr</code>.
+It is possible to get a dynamic attribute with <code>DynamicAttr::get</code> and
+<code>ExtensibleDialect::lookupAttrDefinition</code>.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>auto</span> <span class=n>attrDef</span> <span class=o>=</span> <span class=n>extensibleDialect</span><span class=o>-&gt;</span><span class=n>lookupAttrDefinition</span><span class=p>(</span><span class=s>&#34;my_dynamic_attr&#34;</span><span class=p>);</span>
+<span class=n>ArrayRef</span><span class=o>&lt;</span><span class=n>Attribute</span><span class=o>&gt;</span> <span class=n>params</span> <span class=o>=</span> <span class=p>...;</span>
+<span class=k>auto</span> <span class=n>attr</span> <span class=o>=</span> <span class=n>DynamicAttr</span><span class=o>::</span><span class=n>get</span><span class=p>(</span><span class=n>attrDef</span><span class=p>,</span> <span class=n>params</span><span class=p>);</span>
+</code></pre></div><p>It is also possible to cast an <code>Attribute</code> known to be defined at runtime to a
+<code>DynamicAttr</code>.</p><div class=highlight><pre class=chroma><code class=language-c++ data-lang=c++><span class=k>auto</span> <span class=n>dynAttr</span> <span class=o>=</span> <span class=n>attr</span><span class=p>.</span><span class=n>cast</span><span class=o>&lt;</span><span class=n>DynamicAttr</span><span class=o>&gt;</span><span class=p>();</span>
+<span class=k>auto</span> <span class=n>attrDef</span> <span class=o>=</span> <span class=n>dynAttr</span><span class=p>.</span><span class=n>getAttrDef</span><span class=p>();</span>
+<span class=k>auto</span> <span class=n>args</span> <span class=o>=</span> <span class=n>dynAttr</span><span class=p>.</span><span class=n>getParams</span><span class=p>();</span>
+</code></pre></div><h2 id=implementation-details>Implementation details&nbsp;<a class=headline-hash href=#implementation-details>¶</a></h2><h3 id=extensible-dialect>Extensible dialect&nbsp;<a class=headline-hash href=#extensible-dialect>¶</a></h3><p>The role of extensible dialects is to own the necessary data for defined
+operations and types. They also contain the necessary accessors to easily
+access them.</p><p>In order to cast a <code>Dialect</code> back to an <code>ExtensibleDialect</code>, we implement the
+<code>IsExtensibleDialect</code> interface to all <code>ExtensibleDialect</code>. The casting is done
+by checking if the <code>Dialect</code> implements <code>IsExtensibleDialect</code> or not.</p><h3 id=operation-representation-and-registration>Operation representation and registration&nbsp;<a class=headline-hash href=#operation-representation-and-registration>¶</a></h3><p>Operations are represented in mlir using the <code>AbstractOperation</code> class. They are
+registered in dialects the same way operations defined in C++ are registered,
+which is by calling <code>AbstractOperation::insert</code>.</p><p>The only difference is that a new <code>TypeID</code> needs to be created for each
+operation, since operations are not represented by a C++ class. This is done
+using a <code>TypeIDAllocator</code>, which can allocate a new unique <code>TypeID</code> at runtime.</p><h3 id=type-representation-and-registration>Type representation and registration&nbsp;<a class=headline-hash href=#type-representation-and-registration>¶</a></h3><p>Unlike operations, types need to define a C++ storage class that takes care of
+type parameters. They also need to define another C++ class to access that
+storage. <code>DynamicTypeStorage</code> defines the storage of types defined at runtime,
+and <code>DynamicType</code> gives access to the storage, as well as defining useful
+functions. A <code>DynamicTypeStorage</code> contains a list of <code>Attribute</code> type
+parameters, as well as a pointer to the type definition.</p><p>Types are registered using the <code>Dialect::addType</code> method, which expect a
+<code>TypeID</code> that is generated using a <code>TypeIDAllocator</code>. The type uniquer also
+register the type with the given <code>TypeID</code>. This mean that we can reuse our
+single <code>DynamicType</code> with different <code>TypeID</code> to represent the different types
+defined at runtime.</p><p>Since the different types defined at runtime have different <code>TypeID</code>, it is not
+possible to use <code>TypeID</code> to cast a <code>Type</code> into a <code>DynamicType</code>. Thus, similar to
+<code>Dialect</code>, all <code>DynamicType</code> define a <code>IsDynamicTypeTrait</code>, so casting a <code>Type</code>
+to a <code>DynamicType</code> boils down to querying the <code>IsDynamicTypeTrait</code> trait.</p><div class=edit-meta><br></div><nav class=pagination><a class="nav nav-prev" href=/docs/Dialects/Transform/ title="Transform Dialect"><i class="fas fa-arrow-left" aria-hidden=true></i>Prev - Transform Dialect</a>
+<a class="nav nav-next" href=/docs/Interfaces/ title=Interfaces>Next - Interfaces <i class="fas fa-arrow-right" aria-hidden=true></i></a></nav><footer><p class=powered>Powered by <a href=https://gohugo.io>Hugo</a>. Theme by <a href=https://themes.gohugo.io/hugo-theme-techdoc/>TechDoc</a>. Designed by <a href=https://github.com/thingsym/hugo-theme-techdoc>Thingsym</a>.</p></footer></main><div class=sidebar><nav class=slide-menu><ul><li><a href=https://mlir.llvm.org/>Home</a></li><li><a href=/pubs/>MLIR Related Publications</a></li><li><a href=/talks/>Talks</a></li><li><a href=/users/>Users of MLIR</a></li><li class=has-sub-menu><a href=/getting_started/>Getting Started<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/getting_started/Debugging/>Debugging Tips</a></li><li><a href=/getting_started/Faq/>FAQ</a></li><li><a href=/getting_started/Contributing/>How to Contribute</a></li><li><a href=/getting_started/DeveloperGuide/>Developer Guide</a></li><li><a href=/getting_started/openprojects/>Open Projects</a></li><li><a href=/getting_started/Glossary/>Glossary</a></li><li><a href=/getting_started/TestingGuide/>Testing Guide</a></li></ul></li><li class="parent has-sub-menu"><a href=/docs/>Code Documentation<span class="mark opened">-</span></a><ul class=sub-menu><li class=has-sub-menu><a href=/docs/Bindings/>Bindings<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Bindings/Python/>MLIR Python Bindings</a></li></ul></li><li class=has-sub-menu><a href=/docs/Tools/>Tools<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tools/MLIRLSP/>MLIR : Language Server Protocol</a></li><li><a href=/docs/Tools/mlir-reduce/>MLIR Reduce</a></li></ul></li><li><a href=/docs/BufferDeallocationInternals/>Buffer Deallocation - Internals</a></li><li><a href=/docs/Bufferization/>Bufferization</a></li><li><a href=/docs/DataLayout/>Data Layout Modeling</a></li><li><a href=/docs/DebugActions/>Debug Actions</a></li><li><a href=/docs/AttributesAndTypes/>Defining Dialect Attributes and Types</a></li><li><a href=/docs/DefiningDialects/>Defining Dialects</a></li><li><a href=/docs/Diagnostics/>Diagnostic Infrastructure</a></li><li><a href=/docs/DialectConversion/>Dialect Conversion</a></li><li class=has-sub-menu><a href=/docs/Dialects/>Dialects<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Dialects/OpenACCDialect/>'acc' Dialect</a></li><li><a href=/docs/Dialects/Affine/>'affine' Dialect</a></li><li><a href=/docs/Dialects/AMX/>'amx' Dialect</a></li><li><a href=/docs/Dialects/ArithmeticOps/>'arith' Dialect</a></li><li><a href=/docs/Dialects/ArmNeon/>'arm_neon' Dialect</a></li><li><a href=/docs/Dialects/ArmSVE/>'arm_sve' Dialect</a></li><li><a href=/docs/Dialects/AsyncDialect/>'async' Dialect</a></li><li><a href=/docs/Dialects/BufferizationOps/>'bufferization' Dialect</a></li><li><a href=/docs/Dialects/ControlFlowDialect/>'cf' Dialect</a></li><li><a href=/docs/Dialects/ComplexOps/>'complex' Dialect</a></li><li><a href=/docs/Dialects/DLTIDialect/>'dlti' Dialect</a></li><li><a href=/docs/Dialects/EmitC/>'emitc' Dialect</a></li><li><a href=/docs/Dialects/Func/>'func' Dialect</a></li><li><a href=/docs/Dialects/GPU/>'gpu' Dialect</a></li><li class=has-sub-menu><a href=/docs/Dialects/Linalg/>'linalg' Dialect<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Dialects/Linalg/OpDSL/>Linalg OpDSL</a></li></ul></li><li><a href=/docs/Dialects/LLVM/>'llvm' Dialect</a></li><li><a href=/docs/Dialects/MathOps/>'math' Dialect</a></li><li><a href=/docs/Dialects/MemRef/>'memref' Dialect</a></li><li><a href=/docs/Dialects/MLProgramOps/>'ml_program' Dialect</a></li><li><a href=/docs/Dialects/NVGPU/>'nvgpu' Dialect</a></li><li><a href=/docs/Dialects/NVVMDialect/>'nvvm' Dialect</a></li><li><a href=/docs/Dialects/OpenMPDialect/>'omp' Dialect</a></li><li><a href=/docs/Dialects/PDLOps/>'pdl' Dialect</a></li><li><a href=/docs/Dialects/PDLInterpOps/>'pdl_interp' Dialect</a></li><li><a href=/docs/Dialects/QuantDialect/>'quant' Dialect</a></li><li><a href=/docs/Dialects/ROCDLDialect/>'rocdl' Dialect</a></li><li><a href=/docs/Dialects/SCFDialect/>'scf' Dialect</a></li><li><a href=/docs/Dialects/ShapeDialect/>'shape' Dialect</a></li><li><a href=/docs/Dialects/SparseTensorOps/>'sparse_tensor' Dialect</a></li><li><a href=/docs/Dialects/SPIR-V/>'spv' Dialect</a></li><li><a href=/docs/Dialects/TensorOps/>'tensor' Dialect</a></li><li><a href=/docs/Dialects/Vector/>'vector' Dialect</a></li><li><a href=/docs/Dialects/X86Vector/>'x86vector' Dialect</a></li><li><a href=/docs/Dialects/Builtin/>Builtin Dialect</a></li><li><a href=/docs/Dialects/TOSA/>Tensor Operator Set Architecture (TOSA) Dialect</a></li><li><a href=/docs/Dialects/Transform/>Transform Dialect</a></li></ul></li><li class=active><a href=/docs/ExtensibleDialects/>Extensible dialects</a></li><li><a href=/docs/Interfaces/>Interfaces</a></li><li><a href=/docs/TargetLLVMIR/>LLVM IR Target</a></li><li><a href=/docs/CAPI/>MLIR C API</a></li><li><a href=/docs/LangRef/>MLIR Language Reference</a></li><li><a href=/docs/Canonicalization/>Operation Canonicalization</a></li><li><a href=/docs/OpDefinitions/>Operation Definition Specification (ODS)</a></li><li><a href=/docs/PassManagement/>Pass Infrastructure</a></li><li><a href=/docs/Passes/>Passes</a></li><li><a href=/docs/PatternRewriter/>Pattern Rewriting : Generic DAG-to-DAG Rewriting</a></li><li><a href=/docs/PDLL/>PDLL - PDL Language</a></li><li><a href=/docs/Quantization/>Quantization</a></li><li class=has-sub-menu><a href=/docs/Rationale/>Rationale<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Rationale/RationaleGenericDAGRewriter/>Generic DAG Rewriter Infrastructure Rationale</a></li><li><a href=/docs/Rationale/RationaleLinalgDialect/>Linalg Dialect Rationale: The Case For Compiler-Friendly Custom Operations</a></li><li><a href=/docs/Rationale/Rationale/>MLIR Rationale</a></li><li><a href=/docs/Rationale/MLIRForGraphAlgorithms/>MLIR: Incremental Application to Graph Algorithms in ML Frameworks</a></li><li><a href=/docs/Rationale/RationaleSimplifiedPolyhedralForm/>MLIR: The case for a simplified polyhedral form</a></li><li><a href=/docs/Rationale/UsageOfConst/>Usage of 'const' in MLIR, for core IR types</a></li></ul></li><li><a href=/docs/ShapeInference/>Shape Inference</a></li><li><a href=/docs/SPIRVToLLVMDialectConversion/>SPIR-V Dialect to LLVM Dialect conversion manual</a></li><li><a href=/docs/SymbolsAndSymbolTables/>Symbols and Symbol Tables</a></li><li><a href=/docs/DeclarativeRewrites/>Table-driven Declarative Rewrite Rule (DRR)</a></li><li><a href=/docs/Traits/>Traits</a></li><li class=has-sub-menu><a href=/docs/Tutorials/>Tutorials<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tutorials/CreatingADialect/>Creating a Dialect</a></li><li><a href=/docs/Tutorials/QuickstartRewrites/>Quickstart tutorial to adding MLIR graph rewrite</a></li><li class=has-sub-menu><a href=/docs/Tutorials/Toy/>Toy Tutorial<span class="mark closed">+</span></a><ul class=sub-menu><li><a href=/docs/Tutorials/Toy/Ch-1/>Chapter 1: Toy Language and AST</a></li><li><a href=/docs/Tutorials/Toy/Ch-2/>Chapter 2: Emitting Basic MLIR</a></li><li><a href=/docs/Tutorials/Toy/Ch-3/>Chapter 3: High-level Language-Specific Analysis and Transformation</a></li><li><a href=/docs/Tutorials/Toy/Ch-4/>Chapter 4: Enabling Generic Transformation with Interfaces</a></li><li><a href=/docs/Tutorials/Toy/Ch-5/>Chapter 5: Partial Lowering to Lower-Level Dialects for Optimization</a></li><li><a href=/docs/Tutorials/Toy/Ch-6/>Chapter 6: Lowering to LLVM and CodeGeneration</a></li><li><a href=/docs/Tutorials/Toy/Ch-7/>Chapter 7: Adding a Composite Type to Toy</a></li></ul></li><li><a href=/docs/Tutorials/UnderstandingTheIRStructure/>Understanding the IR Structure</a></li><li><a href=/docs/Tutorials/DataFlowAnalysis/>Writing DataFlow Analyses in MLIR</a></li></ul></li></ul></li></ul></nav><div class=sidebar-footer></div></div></div><a href=# id=backtothetop-fixed class=backtothetop data-backtothetop-duration=600 data-backtothetop-easing=easeOutQuart data-backtothetop-fixed-fadein=1000 data-backtothetop-fixed-fadeout=1000 data-backtothetop-fixed-bottom=10 data-backtothetop-fixed-right=20><span class="fa-layers fa-fw"><i class="fas fa-circle"></i><i class="fas fa-arrow-circle-up"></i></span></a></div></body></html>

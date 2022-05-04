@@ -1,0 +1,5 @@
+<map id="mlir::lsp::CompletionItem" name="mlir::lsp::CompletionItem">
+<area shape="rect" id="node2" href="$classllvm_1_1Optional.html" title="llvm::Optional\&lt; mlir\l::lsp::MarkupContent \&gt;" alt="" coords="400,5,571,47"/>
+<area shape="rect" id="node3" href="$classllvm_1_1Optional.html" title="llvm::Optional\&lt; T \&gt;" alt="" coords="5,46,157,73"/>
+<area shape="rect" id="node4" href="$classllvm_1_1Optional.html" title="llvm::Optional\&lt; mlir\l::lsp::TextEdit \&gt;" alt="" coords="408,71,563,112"/>
+</map>

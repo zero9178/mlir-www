@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classmlir_1_1SelfOwningTypeID.html" title="Defines a TypeID for each instance of this class by using a pointer to the instance. " alt="" coords="5,31,180,57"/>
+<area shape="rect" id="node2" href="$classmlir_1_1DynamicAttrDefinition.html" title="The definition of a dynamic attribute. " alt="" coords="231,5,432,32"/>
+<area shape="rect" id="node3" href="$classmlir_1_1DynamicTypeDefinition.html" title="The definition of a dynamic type. " alt="" coords="228,56,435,83"/>
+</map>

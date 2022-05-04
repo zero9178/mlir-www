@@ -1,0 +1,31 @@
+<map id="lib/Dialect/Vector/Transforms/VectorMultiDimReductionTransforms.cpp" name="lib/Dialect/Vector/Transforms/VectorMultiDimReductionTransforms.cpp">
+<area shape="rect" id="node2" href="$Arithmetic_8h.html" title="mlir/Dialect/Arithmetic\l/IR/Arithmetic.h" alt="" coords="885,377,1056,419"/>
+<area shape="rect" id="node29" href="$Builders_8h.html" title="mlir/IR/Builders.h" alt="" coords="2035,563,2170,590"/>
+<area shape="rect" id="node40" href="$VectorRewritePatterns_8h.html" title="mlir/Dialect/Vector\l/Transforms/VectorRewritePatterns.h" alt="" coords="1525,109,1782,151"/>
+<area shape="rect" id="node47" href="$VectorUtils_8h.html" title="mlir/Dialect/Vector\l/Utils/VectorUtils.h" alt="" coords="1814,199,1957,240"/>
+<area shape="rect" id="node49" href="$ImplicitLocOpBuilder_8h.html" title="mlir/IR/ImplicitLocOpBuilder.h" alt="" coords="1933,117,2147,143"/>
+<area shape="rect" id="node50" href="$TypeUtilities_8h.html" title="mlir/IR/TypeUtilities.h" alt="" coords="43,653,205,679"/>
+<area shape="rect" id="node3" href="$IR_2Dialect_8h.html" title="mlir/IR/Dialect.h" alt="" coords="909,735,1035,761"/>
+<area shape="rect" id="node17" href="$OpDefinition_8h.html" title="mlir/IR/OpDefinition.h" alt="" coords="1339,653,1501,679"/>
+<area shape="rect" id="node21" href="$OpImplementation_8h.html" title="mlir/IR/OpImplementation.h" alt="" coords="885,563,1088,590"/>
+<area shape="rect" id="node26" href="$CastInterfaces_8h.html" title="mlir/Interfaces/CastInterfaces.h" alt="" coords="635,563,861,590"/>
+<area shape="rect" id="node28" href="$InferTypeOpInterface_8h.html" title="mlir/Interfaces/InferType\lOpInterface.h" alt="" coords="1651,467,1832,508"/>
+<area shape="rect" id="node32" href="$SideEffectInterfaces_8h.html" title="mlir/Interfaces/SideEffect\lInterfaces.h" alt="" coords="1112,556,1299,597"/>
+<area shape="rect" id="node34" href="$VectorInterfaces_8h.html" title="mlir/Interfaces/VectorInterfaces.h" alt="" coords="2422,474,2661,501"/>
+<area shape="rect" id="node4" href="$DialectRegistry_8h.html" title="mlir/IR/DialectRegistry.h" alt="" coords="1035,809,1213,836"/>
+<area shape="rect" id="node8" href="$OperationSupport_8h.html" title="mlir/IR/OperationSupport.h" alt="" coords="1339,809,1533,836"/>
+<area shape="rect" id="node14" href="$TypeID_8h.html" title="mlir/Support/TypeID.h" alt="" coords="747,809,909,836"/>
+<area shape="rect" id="node9" href="$IR_2BuiltinAttributes_8h.html" title="mlir/IR/BuiltinAttributes.h" alt="" coords="1783,884,1969,911"/>
+<area shape="rect" id="node10" href="$Location_8h.html" title="mlir/IR/Location.h" alt="" coords="1364,884,1500,911"/>
+<area shape="rect" id="node11" href="$Attributes_8h.html" title="mlir/IR/Attributes.h" alt="" coords="1858,959,2003,985"/>
+<area shape="rect" id="node15" href="$Support_2LLVM_8h.html" title="mlir/Support/LLVM.h" alt="" coords="2378,884,2529,911"/>
+<area shape="rect" id="node18" href="$IR_2Operation_8h.html" title="mlir/IR/Operation.h" alt="" coords="1361,735,1506,761"/>
+<area shape="rect" id="node22" href="$IR_2BuiltinTypes_8h.html" title="mlir/IR/BuiltinTypes.h" alt="" coords="2260,653,2420,679"/>
+<area shape="rect" id="node23" href="$DialectInterface_8h.html" title="mlir/IR/DialectInterface.h" alt="" coords="579,735,765,761"/>
+<area shape="rect" id="node35" href="$IR_2AffineMap_8h.html" title="mlir/IR/AffineMap.h" alt="" coords="2736,563,2883,590"/>
+<area shape="rect" id="node42" href="$VectorOps_8h.html" title="mlir/Dialect/Vector\l/IR/VectorOps.h" alt="" coords="1670,288,1813,329"/>
+<area shape="rect" id="node43" href="$PatternMatch_8h.html" title="mlir/IR/PatternMatch.h" alt="" coords="1131,385,1298,411"/>
+<area shape="rect" id="node44" href="$BuiltinOps_8h.html" title="mlir/IR/BuiltinOps.h" alt="" coords="1022,474,1170,501"/>
+<area shape="rect" id="node45" href="$ControlFlowInterfaces_8h.html" title="mlir/Interfaces/ControlFlow\lInterfaces.h" alt="" coords="1477,377,1675,419"/>
+<area shape="rect" id="node46" href="$ViewLikeInterface_8h.html" title="mlir/Interfaces/ViewLike\lInterface.h" alt="" coords="2154,467,2334,508"/>
+</map>

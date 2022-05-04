@@ -1,0 +1,5 @@
+<map id="mlir::DialectExtension&lt; DerivedT, DialectsT &gt;" name="mlir::DialectExtension&lt; DerivedT, DialectsT &gt;">
+<area shape="rect" id="node3" href="$classmlir_1_1DialectExtension.html" title="mlir::DialectExtension\l\&lt; DerivedTy, TransformDialect,\l ExtraDialects... \&gt;" alt="" coords="5,200,231,256"/>
+<area shape="rect" id="node2" href="$classmlir_1_1DialectExtensionBase.html" title="This class represents an opaque dialect extension. " alt="" coords="19,5,217,32"/>
+<area shape="rect" id="node4" href="$classmlir_1_1transform_1_1TransformDialectExtension.html" title="Base class for extensions of the Transform dialect that supports injecting operations into the Transf..." alt="" coords="10,305,226,361"/>
+</map>

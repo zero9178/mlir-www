@@ -1,0 +1,13 @@
+<map id="include/mlir/Dialect/Bufferization/Transforms/Bufferize.h" name="include/mlir/Dialect/Bufferization/Transforms/Bufferize.h">
+<area shape="rect" id="node2" href="$Arithmetic_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Arithmetic\l/Transforms/Bufferize.cpp" alt="" coords="5,109,192,151"/>
+<area shape="rect" id="node3" href="$Bufferization_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/Bufferize.cpp" alt="" coords="216,109,403,151"/>
+<area shape="rect" id="node4" href="$BufferUtils_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/BufferUtils.cpp" alt="" coords="427,109,626,151"/>
+<area shape="rect" id="node5" href="$OneShotAnalysis_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/OneShotAnalysis.cpp" alt="" coords="650,109,889,151"/>
+<area shape="rect" id="node6" href="$OneShotModuleBufferize_8cpp.html" title="lib/Dialect/Bufferization\l/Transforms/OneShotModuleBufferize.cpp" alt="" coords="913,109,1202,151"/>
+<area shape="rect" id="node7" href="$FuncBufferize_8cpp.html" title="lib/Dialect/Func/Transforms\l/FuncBufferize.cpp" alt="" coords="1227,109,1424,151"/>
+<area shape="rect" id="node8" href="$Linalg_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Linalg\l/Transforms/Bufferize.cpp" alt="" coords="1448,109,1635,151"/>
+<area shape="rect" id="node9" href="$SCF_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/SCF/Transforms\l/Bufferize.cpp" alt="" coords="1659,109,1851,151"/>
+<area shape="rect" id="node10" href="$Shape_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Shape/Transforms\l/Bufferize.cpp" alt="" coords="1875,109,2083,151"/>
+<area shape="rect" id="node11" href="$Tensor_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Tensor\l/Transforms/Bufferize.cpp" alt="" coords="2107,109,2293,151"/>
+<area shape="rect" id="node12" href="$Vector_2Transforms_2Bufferize_8cpp.html" title="lib/Dialect/Vector\l/Transforms/Bufferize.cpp" alt="" coords="2317,109,2504,151"/>
+</map>

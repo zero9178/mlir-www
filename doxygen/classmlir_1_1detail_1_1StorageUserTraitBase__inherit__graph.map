@@ -1,0 +1,4 @@
+<map id="mlir::detail::StorageUserTraitBase&lt; ConcreteType, TraitType &gt;" name="mlir::detail::StorageUserTraitBase&lt; ConcreteType, TraitType &gt;">
+<area shape="rect" id="node2" href="$classmlir_1_1AttributeTrait_1_1IsDynamicAttr.html" title="mlir::AttributeTrait\l::IsDynamicAttr\&lt; ConcreteType,\l IsDynamicAttr \&gt;" alt="" coords="266,5,497,61"/>
+<area shape="rect" id="node3" href="$classmlir_1_1TypeTrait_1_1IsDynamicType.html" title="mlir::TypeTrait::IsDynamic\lType\&lt; ConcreteType, IsDynamicType \&gt;" alt="" coords="243,86,520,127"/>
+</map>

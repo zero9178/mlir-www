@@ -1,0 +1,8 @@
+<map id="mlir::detail::DynamicAttrStorage" name="mlir::detail::DynamicAttrStorage">
+<area shape="rect" id="node2" href="$classmlir_1_1AttributeStorage.html" title="Base storage class appearing in an attribute. " alt="" coords="373,14,535,41"/>
+<area shape="rect" id="node3" href="$classmlir_1_1StorageUniquer_1_1BaseStorage.html" title="This class acts as the base storage that all storage classes must derived from. " alt="" coords="14,5,171,47"/>
+<area shape="rect" id="node4" href="$classmlir_1_1DynamicAttrDefinition.html" title="The definition of a dynamic attribute. " alt="" coords="353,67,555,94"/>
+<area shape="rect" id="node5" href="$classmlir_1_1SelfOwningTypeID.html" title="Defines a TypeID for each instance of this class by using a pointer to the instance. " alt="" coords="5,71,180,98"/>
+<area shape="rect" id="node6" href="$classllvm_1_1ArrayRef.html" title="llvm::ArrayRef\&lt; mlir\l::Attribute \&gt;" alt="" coords="376,119,532,160"/>
+<area shape="rect" id="node7" href="$classllvm_1_1ArrayRef.html" title="llvm::ArrayRef\&lt; T \&gt;" alt="" coords="16,126,169,153"/>
+</map>

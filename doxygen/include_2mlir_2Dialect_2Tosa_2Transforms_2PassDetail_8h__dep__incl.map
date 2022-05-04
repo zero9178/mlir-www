@@ -1,0 +1,10 @@
+<map id="include/mlir/Dialect/Tosa/Transforms/PassDetail.h" name="include/mlir/Dialect/Tosa/Transforms/PassDetail.h">
+<area shape="rect" id="node2" href="$TosaToArithPass_8cpp.html" title="lib/Conversion/TosaToArith\l/TosaToArithPass.cpp" alt="" coords="5,95,199,136"/>
+<area shape="rect" id="node3" href="$TosaToLinalgNamedPass_8cpp.html" title="lib/Conversion/TosaToLinalg\l/TosaToLinalgNamedPass.cpp" alt="" coords="223,95,434,136"/>
+<area shape="rect" id="node4" href="$TosaToLinalgPass_8cpp.html" title="lib/Conversion/TosaToLinalg\l/TosaToLinalgPass.cpp" alt="" coords="459,95,660,136"/>
+<area shape="rect" id="node5" href="$TosaToSCFPass_8cpp.html" title="lib/Conversion/TosaToSCF\l/TosaToSCFPass.cpp" alt="" coords="685,95,871,136"/>
+<area shape="rect" id="node6" href="$TosaToTensorPass_8cpp.html" title="lib/Conversion/TosaToTensor\l/TosaToTensorPass.cpp" alt="" coords="896,95,1100,136"/>
+<area shape="rect" id="node7" href="$TosaInferShapes_8cpp.html" title="lib/Dialect/Tosa/Transforms\l/TosaInferShapes.cpp" alt="" coords="1125,95,1322,136"/>
+<area shape="rect" id="node8" href="$TosaMakeBroadcastable_8cpp.html" title="lib/Dialect/Tosa/Transforms\l/TosaMakeBroadcastable.cpp" alt="" coords="1346,95,1557,136"/>
+<area shape="rect" id="node9" href="$TosaOptionalDecompositions_8cpp.html" title="lib/Dialect/Tosa/Transforms\l/TosaOptionalDecompositions.cpp" alt="" coords="1581,95,1823,136"/>
+</map>

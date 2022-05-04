@@ -1,0 +1,33 @@
+<map id="lib/CAPI/Dialect/SparseTensor.cpp" name="lib/CAPI/Dialect/SparseTensor.cpp">
+<area shape="rect" id="node2" href="$c_2Dialect_2SparseTensor_8h.html" title="mlir&#45;c/Dialect/SparseTensor.h" alt="" coords="298,80,509,107"/>
+<area shape="rect" id="node5" href="$c_2IR_8h.html" title="mlir&#45;c/IR.h" alt="" coords="502,341,590,367"/>
+<area shape="rect" id="node12" href="$CAPI_2AffineMap_8h.html" title="mlir/CAPI/AffineMap.h" alt="" coords="885,80,1047,107"/>
+<area shape="rect" id="node14" href="$Support_2LLVM_8h.html" title="mlir/Support/LLVM.h" alt="" coords="1179,803,1329,830"/>
+<area shape="rect" id="node22" href="$CAPI_2Registration_8h.html" title="mlir/CAPI/Registration.h" alt="" coords="685,80,861,107"/>
+<area shape="rect" id="node45" href="$Dialect_2SparseTensor_2IR_2SparseTensor_8h.html" title="mlir/Dialect/SparseTensor\l/IR/SparseTensor.h" alt="" coords="1780,244,1968,285"/>
+<area shape="rect" id="node3" href="$c_2AffineMap_8h.html" title="mlir&#45;c/AffineMap.h" alt="" coords="419,162,559,189"/>
+<area shape="rect" id="node10" href="$c_2Registration_8h.html" title="mlir&#45;c/Registration.h" alt="" coords="241,162,395,189"/>
+<area shape="rect" id="node4" href="$c_2AffineExpr_8h.html" title="mlir&#45;c/AffineExpr.h" alt="" coords="367,251,509,278"/>
+<area shape="rect" id="node8" href="$c_2Support_8h.html" title="mlir&#45;c/Support.h" alt="" coords="542,423,667,449"/>
+<area shape="rect" id="node13" href="$Wrap_8h.html" title="mlir/CAPI/Wrap.h" alt="" coords="685,251,815,278"/>
+<area shape="rect" id="node18" href="$IR_2AffineMap_8h.html" title="mlir/IR/AffineMap.h" alt="" coords="1911,572,2058,599"/>
+<area shape="rect" id="node19" href="$IR_2AffineExpr_8h.html" title="mlir/IR/AffineExpr.h" alt="" coords="1911,721,2058,748"/>
+<area shape="rect" id="node23" href="$CAPI_2IR_8h.html" title="mlir/CAPI/IR.h" alt="" coords="796,162,907,189"/>
+<area shape="rect" id="node44" href="$CAPI_2Support_8h.html" title="mlir/CAPI/Support.h" alt="" coords="931,162,1079,189"/>
+<area shape="rect" id="node24" href="$BuiltinOps_8h.html" title="mlir/IR/BuiltinOps.h" alt="" coords="1296,251,1444,278"/>
+<area shape="rect" id="node35" href="$MLIRContext_8h.html" title="mlir/IR/MLIRContext.h" alt="" coords="957,647,1119,673"/>
+<area shape="rect" id="node42" href="$IR_2Operation_8h.html" title="mlir/IR/Operation.h" alt="" coords="720,497,865,524"/>
+<area shape="rect" id="node25" href="$OpImplementation_8h.html" title="mlir/IR/OpImplementation.h" alt="" coords="1455,341,1658,367"/>
+<area shape="rect" id="node43" href="$SideEffectInterfaces_8h.html" title="mlir/Interfaces/SideEffect\lInterfaces.h" alt="" coords="1245,333,1431,375"/>
+<area shape="rect" id="node26" href="$IR_2BuiltinTypes_8h.html" title="mlir/IR/BuiltinTypes.h" alt="" coords="2094,423,2254,449"/>
+<area shape="rect" id="node32" href="$OpDefinition_8h.html" title="mlir/IR/OpDefinition.h" alt="" coords="1479,423,1642,449"/>
+<area shape="rect" id="node27" href="$BuiltinAttributeInterfaces_8h.html" title="BuiltinAttributeInterfaces.h" alt="" coords="1860,497,2059,524"/>
+<area shape="rect" id="node29" href="$SubElementInterfaces_8h.html" title="SubElementInterfaces.h" alt="" coords="2289,497,2467,524"/>
+<area shape="rect" id="node28" href="$LogicalResult_8h.html" title="mlir/Support/LogicalResult.h" alt="" coords="1245,572,1449,599"/>
+<area shape="rect" id="node33" href="$IR_2Dialect_8h.html" title="mlir/IR/Dialect.h" alt="" coords="1500,497,1627,524"/>
+<area shape="rect" id="node34" href="$DialectRegistry_8h.html" title="mlir/IR/DialectRegistry.h" alt="" coords="1474,572,1653,599"/>
+<area shape="rect" id="node36" href="$TypeID_8h.html" title="mlir/Support/TypeID.h" alt="" coords="1113,721,1275,748"/>
+<area shape="rect" id="node41" href="$OperationSupport_8h.html" title="mlir/IR/OperationSupport.h" alt="" coords="671,572,866,599"/>
+<area shape="rect" id="node46" href="$TensorEncoding_8h.html" title="mlir/IR/TensorEncoding.h" alt="" coords="1989,341,2172,367"/>
+<area shape="rect" id="node47" href="$InferTypeOpInterface_8h.html" title="mlir/Interfaces/InferType\lOpInterface.h" alt="" coords="1783,333,1965,375"/>
+</map>

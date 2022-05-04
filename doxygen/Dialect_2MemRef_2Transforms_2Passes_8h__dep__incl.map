@@ -1,0 +1,9 @@
+<map id="include/mlir/Dialect/MemRef/Transforms/Passes.h" name="include/mlir/Dialect/MemRef/Transforms/Passes.h">
+<area shape="rect" id="node2" href="$InitAllPasses_8h.html" title="include/mlir/InitAllPasses.h" alt="" coords="5,109,203,136"/>
+<area shape="rect" id="node4" href="$MemRef_2Transforms_2ExpandOps_8cpp.html" title="lib/Dialect/MemRef\l/Transforms/ExpandOps.cpp" alt="" coords="227,102,429,143"/>
+<area shape="rect" id="node5" href="$FoldSubViewOps_8cpp.html" title="lib/Dialect/MemRef\l/Transforms/FoldSubViewOps.cpp" alt="" coords="453,102,691,143"/>
+<area shape="rect" id="node6" href="$MultiBuffer_8cpp.html" title="lib/Dialect/MemRef\l/Transforms/MultiBuffer.cpp" alt="" coords="714,102,913,143"/>
+<area shape="rect" id="node7" href="$NormalizeMemRefs_8cpp.html" title="lib/Dialect/MemRef\l/Transforms/NormalizeMemRefs.cpp" alt="" coords="937,102,1193,143"/>
+<area shape="rect" id="node8" href="$ResolveShapedTypeResultDims_8cpp.html" title="lib/Dialect/MemRef\l/Transforms/ResolveShapedType\lResultDims.cpp" alt="" coords="1218,95,1449,151"/>
+<area shape="rect" id="node3" href="$Registration_8cpp.html" title="lib/CAPI/Registration\l/Registration.cpp" alt="" coords="27,199,181,240"/>
+</map>
